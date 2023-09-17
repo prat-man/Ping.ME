@@ -1,0 +1,41 @@
+.root {
+    -fx-font-family: 'Open Sans';
+}
+
+.chat-message {
+    -fx-background-color: white;
+    -fx-background-radius: 0 5 5 0;
+    -fx-border-width: 0 0 0 3;
+    -fx-min-width: 150;
+    -fx-effect: dropshadow(gaussian, #cccccc, 5, 0, 1, 1);
+}
+
+.chat-message .sender {
+    -fx-font-weight: bold;
+}
+
+.chat-message .message {
+    -fx-text-fill: black;
+}
+
+.chat-message .timestamp {
+    -fx-text-fill: gray;
+    -fx-font-size: 10px;
+}
+
+.chat-message.self {
+    -fx-background-color: #bad7f2;
+    -fx-background-radius: 5 0 0 5;
+    -fx-border-color: #4e98de;
+    -fx-border-width: 0 3 0 0;
+    -fx-effect: dropshadow(gaussian, #cccccc, 5, 0, -1, 1);
+}
+
+.lobby {
+    -fx-font-weight: bold;
+}
+
+.text-input,
+.text-input:focused {
+    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
+}
