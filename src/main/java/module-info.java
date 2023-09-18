@@ -6,6 +6,10 @@ module in.pratanumandal.pingme {
 
     opens in.pratanumandal.pingme to javafx.fxml;
     exports in.pratanumandal.pingme;
+    exports in.pratanumandal.pingme.components;
     exports in.pratanumandal.pingme.controller;
+    exports in.pratanumandal.pingme.engine;
+
+    opens in.pratanumandal.pingme.components to javafx.fxml;
     opens in.pratanumandal.pingme.controller to javafx.fxml;
 }

@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class MessageController {
+public class MessageController extends AbstractController {
 
     @FXML private HBox container;
     @FXML private VBox wrapper;
@@ -18,32 +18,42 @@ public class MessageController {
 
     @FXML
     protected void initialize() {
+        sender.managedProperty().bind(sender.visibleProperty());
+        timestamp.managedProperty().bind(timestamp.visibleProperty());
     }
 
     public void setMessage(Message message) {
         if (message.getUser() == null) {
-            this.sender.setText(null);
-            this.sender.setVisible(false);
-            this.sender.setManaged(false);
+            sender.setText(null);
+            sender.setVisible(false);
+            timestamp.setVisible(false);
 
-            this.container.setAlignment(Pos.TOP_RIGHT);
+            container.setAlignment(Pos.CENTER);
 
-            this.wrapper.getStyleClass().add("self");
+            wrapper.getStyleClass().add("server");
+        }
+        else if (message.getUser().isCurrentUser()) {
+            sender.setText(null);
+            sender.setVisible(false);
+            timestamp.setVisible(true);
+
+            container.setAlignment(Pos.CENTER_RIGHT);
+
+            wrapper.getStyleClass().add("self");
         }
         else {
-            this.sender.setText("~ " + message.getUser().getName());
-            this.sender.setStyle("-fx-text-fill: " + message.getUser().getHexColor());
-            this.sender.setVisible(true);
-            this.sender.setManaged(true);
+            sender.setText("~ " + message.getUser().getName());
+            sender.setStyle("-fx-text-fill: " + message.getUser().getHexColor());
+            sender.setVisible(true);
+            timestamp.setVisible(true);
 
-            this.container.setAlignment(Pos.TOP_LEFT);
+            container.setAlignment(Pos.CENTER_LEFT);
 
-            this.wrapper.getStyleClass().removeAll("self");
-            this.wrapper.setStyle("-fx-border-color: " + message.getUser().getHexColor());
+            wrapper.getStyleClass().removeAll("self");
+            wrapper.setStyle("-fx-border-color: " + message.getUser().getHexColor());
         }
 
         this.message.setText(message.getMessage());
-
         this.timestamp.setText(message.getTimestampString());
     }
 

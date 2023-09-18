@@ -20,7 +20,7 @@
 
 .chat-message .timestamp {
     -fx-text-fill: gray;
-    -fx-font-size: 10px;
+    -fx-font-size: 10;
 }
 
 .chat-message.self {
@@ -31,8 +31,41 @@
     -fx-effect: dropshadow(gaussian, #cccccc, 5, 0, -1, 1);
 }
 
-.lobby {
+.chat-message.server {
+    -fx-background-color: white;
+    -fx-background-radius: 5;
+    -fx-border-color: none;
+    -fx-border-width: 0;
+    -fx-effect: none;
+    -fx-alignment: center;
+}
+
+.chat-message.server .message {
+    -fx-text-fill: gray;
+    -fx-font-size: 11;
+}
+
+.lobby .list-cell {
+    -fx-padding: 0 10 0 5;
+}
+.lobby .list-cell .name {
     -fx-font-weight: bold;
+}
+.lobby .list-cell .role {
+    -fx-text-fill: gray;
+    -fx-font-style: italic;
+}
+.lobby .list-cell:selected .name,
+.lobby .list-cell:selected .role {
+    -fx-text-fill: white;
+}
+.lobby .list-cell .indicator {
+    -fx-font-size: 20;
+    -fx-padding: 0;
+}
+.lobby .list-cell .indicator .text {
+    -fx-stroke: white;
+    -fx-stroke-width: 1;
 }
 
 .text-input,
