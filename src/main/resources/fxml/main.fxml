@@ -4,6 +4,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <BorderPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="in.pratanumandal.pingme.controller.MainController">
    <center>
-      <SplitPane fx:id="container" BorderPane.alignment="CENTER" />
+      <SplitPane fx:id="container" BorderPane.alignment="CENTER" dividerPositions="0.7" />
    </center>
 </BorderPane>
