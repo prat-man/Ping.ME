@@ -41,7 +41,10 @@
 }
 
 .chat-message.server .message {
-    -fx-text-fill: gray;
+    -fx-text-alignment: center;
+}
+.chat-message.server .message * {
+    -fx-fill: gray;
     -fx-font-size: 11;
 }
 

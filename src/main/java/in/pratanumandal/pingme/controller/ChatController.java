@@ -8,6 +8,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -29,6 +31,21 @@ public class ChatController extends AbstractController {
     @FXML
     protected void initialize() {
         message.textProperty().addListener((obs, oldVal, newVal) -> send.setDisable(newVal.isEmpty()));
+
+        message.addEventFilter(KeyEvent.ANY, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                event.consume();
+
+                if (event.getEventType() == KeyEvent.KEY_PRESSED) {
+                    if (event.isShiftDown()) {
+                        message.replaceText(message.getSelection(), "\n");
+                    }
+                    else if (!message.getText().isBlank()) {
+                        sendMessage();
+                    }
+                }
+            }
+        });
 
         state.getMessageList().addListener((ListChangeListener<? super Message>) change -> {
             change.next();

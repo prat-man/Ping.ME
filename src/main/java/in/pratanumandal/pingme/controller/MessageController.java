@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 public class MessageController extends AbstractController {
 
@@ -13,7 +14,7 @@ public class MessageController extends AbstractController {
     @FXML private VBox wrapper;
 
     @FXML private Label sender;
-    @FXML private Label message;
+    @FXML private Text message;
     @FXML private Label timestamp;
 
     @FXML
