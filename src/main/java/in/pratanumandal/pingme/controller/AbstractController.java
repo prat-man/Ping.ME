@@ -1,9 +1,9 @@
 package in.pratanumandal.pingme.controller;
 
-import in.pratanumandal.pingme.engine.State;
+import in.pratanumandal.pingme.engine.ChatState;
 
 public abstract class AbstractController {
 
-    protected State state = State.getInstance();
+    protected ChatState chatState = ChatState.getInstance();
 
 }

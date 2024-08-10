@@ -12,4 +12,5 @@ module in.pratanumandal.pingme {
     exports in.pratanumandal.pingme.components;
     exports in.pratanumandal.pingme.controller;
     exports in.pratanumandal.pingme.engine;
+    exports in.pratanumandal.pingme.engine.server;
 }

@@ -16,7 +16,7 @@
         <HBox alignment="TOP_RIGHT">
             <children>
                 <Label fx:id="connectedUsers" />
-                <Label text=" users connected" />
+                <Label text=" user(s) connected" />
             </children>
         </HBox>
     </children>

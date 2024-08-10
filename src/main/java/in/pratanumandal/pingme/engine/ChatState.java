@@ -3,16 +3,15 @@ package in.pratanumandal.pingme.engine;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class State {
+public class ChatState {
 
-    private static State instance;
+    private static ChatState instance;
 
     private User currentUser;
-    private User host;
     private ObservableList<User> lobbyList;
     private ObservableList<Message> messageList;
 
-    private State() {
+    private ChatState() {
         lobbyList = FXCollections.observableArrayList();
         messageList = FXCollections.observableArrayList();
     }
@@ -25,14 +24,6 @@ public class State {
         this.currentUser = currentUser;
     }
 
-    public User getHost() {
-        return host;
-    }
-
-    public void setHost(User host) {
-        this.host = host;
-    }
-
     public ObservableList<User> getLobbyList() {
         return lobbyList;
     }
@@ -41,9 +32,9 @@ public class State {
         return messageList;
     }
 
-    public static State getInstance() {
+    public static ChatState getInstance() {
         if (instance == null) {
-            instance = new State();
+            instance = new ChatState();
         }
         return instance;
     }

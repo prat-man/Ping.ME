@@ -1,7 +1,7 @@
 package in.pratanumandal.pingme.controller;
 
 import in.pratanumandal.pingme.engine.Message;
-import in.pratanumandal.pingme.engine.User;
+import in.pratanumandal.pingme.engine.client.Client;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +26,8 @@ public class ChatController extends AbstractController {
 
     @FXML private ScrollPane chatScroll;
 
+    private Client client;
+
     private AtomicBoolean scrollToBottom;
 
     @FXML
@@ -47,19 +49,10 @@ public class ChatController extends AbstractController {
             }
         });
 
-        state.getMessageList().addListener((ListChangeListener<? super Message>) change -> {
+        chatState.getMessageList().addListener((ListChangeListener<? super Message>) change -> {
             change.next();
             List<Message> messageList = (List<Message>) change.getAddedSubList();
             for (Message message : messageList) {
-                addChatMessage(message);
-            }
-        });
-
-        state.getLobbyList().addListener((ListChangeListener<? super User>) change -> {
-            change.next();
-            List<User> userList = (List<User>) change.getAddedSubList();
-            for (User user : userList) {
-                Message message = new Message(null, user.getName() + " joined the chat");
                 addChatMessage(message);
             }
         });
@@ -75,10 +68,21 @@ public class ChatController extends AbstractController {
 
     @FXML
     private void sendMessage() {
-        Message message = new Message(this.state.getCurrentUser(), this.message.getText());
+        Message message = new Message(this.chatState.getCurrentUser(), this.message.getText());
         addChatMessage(message);
         this.message.clear();
         this.message.requestFocus();
+
+        client.sendMessage(message);
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+
+        client.runningProperty().addListener((obs, oldVal, newVal) -> {
+            message.setDisable(!newVal);
+            send.setDisable(!newVal);
+        });
     }
 
     private void addChatMessage(Message message) {
@@ -90,8 +94,7 @@ public class ChatController extends AbstractController {
 
             MessageController controller = loader.getController();
             controller.setMessage(message);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

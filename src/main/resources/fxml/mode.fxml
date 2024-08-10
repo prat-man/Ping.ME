@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" fillWidth="false" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="in.pratanumandal.pingme.controller.ModeController">
+   <TitledPane collapsible="false" text="Connect">
+      <content>
+         <HBox spacing="50.0">
+            <children>
+                 <VBox prefWidth="250.0" spacing="7.0">
+                     <padding>
+                         <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                     </padding>
+                     <children>
+                         <TextField fx:id="serverPort" promptText="Port" />
+                     <Region VBox.vgrow="ALWAYS" />
+                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#server" text="Server">
+                             <VBox.margin>
+                                 <Insets top="20.0" />
+                             </VBox.margin>
+                         </Button>
+                     </children>
+                 </VBox>
+               <Separator orientation="VERTICAL" prefHeight="160.0" />
+                 <VBox prefWidth="250.0" spacing="7.0">
+                     <padding>
+                         <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                     </padding>
+                     <children>
+                         <TextField fx:id="clientName" promptText="Name" />
+                         <TextField fx:id="clientAddress" layoutX="17.0" layoutY="17.0" promptText="IP Address" />
+                         <TextField fx:id="clientPort" layoutX="17.0" layoutY="50.0" promptText="Port" />
+                     <Region VBox.vgrow="ALWAYS" />
+                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#client" text="Client" />
+                     </children>
+                 </VBox>
+            </children>
+         </HBox>
+      </content>
+   </TitledPane>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>

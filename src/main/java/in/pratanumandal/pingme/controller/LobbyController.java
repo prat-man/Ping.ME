@@ -9,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class LobbyController extends AbstractController {
 
     @FXML private ListView lobby;
@@ -17,9 +19,13 @@ public class LobbyController extends AbstractController {
 
     private ListProperty<User> lobbyListProperty;
 
+    private AtomicBoolean server;
+
     @FXML
     protected void initialize() {
-        SortedList<User> sortedList = new SortedList<>(state.getLobbyList(), (user1, user2) -> {
+        server = new AtomicBoolean(false);
+
+        SortedList<User> sortedList = new SortedList<>(chatState.getLobbyList(), (user1, user2) -> {
             if (user1.isCurrentUser()) return -1;
             if (user2.isCurrentUser()) return 1;
             return user1.getName().compareTo(user2.getName());
@@ -28,7 +34,7 @@ public class LobbyController extends AbstractController {
 
         lobby.itemsProperty().bind(lobbyListProperty);
 
-        lobby.setCellFactory(view -> new UserListCell());
+        lobby.setCellFactory(view -> new UserListCell(server));
 
         lobby.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal) {
@@ -37,6 +43,10 @@ public class LobbyController extends AbstractController {
         });
 
         connectedUsers.textProperty().bind(lobbyListProperty.sizeProperty().asString());
+    }
+
+    public void setServer(boolean server) {
+        this.server.set(server);
     }
 
 }

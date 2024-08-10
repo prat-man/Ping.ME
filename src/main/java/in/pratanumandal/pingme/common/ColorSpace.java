@@ -49,8 +49,9 @@ public class ColorSpace {
         return color;
     }
 
-    public Color generateColor() {
-        return generateColor(10, 0.3);
+    public String generateColor() {
+        Color color = generateColor(10, 0.3);
+        return "#" + Integer.toHexString(color.hashCode());
     }
 
     private double distance(Color color1, Color color2) {

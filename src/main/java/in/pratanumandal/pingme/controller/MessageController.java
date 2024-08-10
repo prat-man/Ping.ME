@@ -44,14 +44,14 @@ public class MessageController extends AbstractController {
         }
         else {
             sender.setText("~ " + message.getUser().getName());
-            sender.setStyle("-fx-text-fill: " + message.getUser().getHexColor());
+            sender.setStyle("-fx-text-fill: " + message.getUser().getColor());
             sender.setVisible(true);
             timestamp.setVisible(true);
 
             container.setAlignment(Pos.CENTER_LEFT);
 
             wrapper.getStyleClass().removeAll("self");
-            wrapper.setStyle("-fx-border-color: " + message.getUser().getHexColor());
+            wrapper.setStyle("-fx-border-color: " + message.getUser().getColor());
         }
 
         this.message.setText(message.getMessage());

@@ -1,22 +1,27 @@
 package in.pratanumandal.pingme.engine;
 
 import in.pratanumandal.pingme.common.ColorSpace;
-import javafx.scene.paint.Color;
 
+import java.io.Serializable;
+import java.net.InetAddress;
 import java.util.Objects;
 import java.util.UUID;
 
-public class User {
+public class User implements Serializable {
 
     private static final ColorSpace colorSpace = new ColorSpace();
 
     private UUID id;
     private String name;
-    private Color color;
+    private transient InetAddress address;
+    private transient int port;
+    private String color;
 
-    public User(UUID id, String name) {
-        this.id = id;
+    public User(String name, InetAddress address, int port) {
+        this.id = UUID.randomUUID();
         this.name = name;
+        this.address = address;
+        this.port = port;
         this.color = colorSpace.generateColor();
     }
 
@@ -28,20 +33,20 @@ public class User {
         return name;
     }
 
-    public Color getColor() {
+    public InetAddress getAddress() {
+        return address;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public String getColor() {
         return color;
     }
 
-    public String getHexColor() {
-        return "#" + Integer.toHexString(color.hashCode());
-    }
-
     public boolean isCurrentUser() {
-        return this.equals(State.getInstance().getCurrentUser());
-    }
-
-    public boolean isHost() {
-        return this.equals(State.getInstance().getHost());
+        return this.equals(ChatState.getInstance().getCurrentUser());
     }
 
     @Override
