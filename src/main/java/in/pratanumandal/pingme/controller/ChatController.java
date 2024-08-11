@@ -3,13 +3,11 @@ package in.pratanumandal.pingme.controller;
 import in.pratanumandal.pingme.common.Constants;
 import in.pratanumandal.pingme.engine.Message;
 import in.pratanumandal.pingme.engine.client.Client;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -25,7 +23,7 @@ import org.fxmisc.flowless.VirtualizedScrollPane;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ChatController extends AbstractController {
 
@@ -89,6 +87,18 @@ public class ChatController extends AbstractController {
         scrollPane.getStyleClass().add("chat-scroll");
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
         container.getChildren().add(scrollPane);
+
+        AtomicReference<HBox> first = new AtomicReference<>();
+        AtomicReference<HBox> last = new AtomicReference<>();
+        messages.addListener((ListChangeListener<? super HBox>) change -> {
+            if (first.get() != null) first.get().getStyleClass().remove("first");
+            first.set(messages.getFirst());
+            if (first.get() != null) first.get().getStyleClass().add("first");
+
+            if (last.get() != null) last.get().getStyleClass().remove("last");
+            last.set(messages.getLast());
+            if (last.get() != null) last.get().getStyleClass().add("last");
+        });
     }
 
     @FXML

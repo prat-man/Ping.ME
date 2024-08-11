@@ -14,6 +14,7 @@ module in.pratanumandal.pingme {
     exports in.pratanumandal.pingme.controller;
     exports in.pratanumandal.pingme.engine;
     exports in.pratanumandal.pingme.engine.server;
+    exports in.pratanumandal.pingme.engine.client;
     exports in.pratanumandal.pingme.common;
     opens in.pratanumandal.pingme.common to javafx.fxml;
 }

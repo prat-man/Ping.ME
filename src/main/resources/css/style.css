@@ -4,14 +4,23 @@
 
 .chat-scroll {
     -fx-background-color: -fx-box-border, -fx-background;
-    -fx-background-insets: -1 0 -1 0, 0 1 0 1;
-}
-
-.chat-message-container {
-    -fx-padding: 4 7 4 7;
+    -fx-background-insets: -1, 0;
 }
 
 .chat-message {
+    -fx-padding: 4 7 3 7;
+}
+.chat-message.first {
+    -fx-padding: 7 7 3 7;
+}
+.chat-message.last {
+    -fx-padding: 4 7 7 7;
+}
+.chat-message.first.last {
+    -fx-padding: 7 7 7 7;
+}
+
+.chat-message .card {
     -fx-background-color: white;
     -fx-background-radius: 0 5 5 0;
     -fx-border-width: 0 0 0 3;
@@ -19,20 +28,20 @@
     -fx-effect: dropshadow(gaussian, #cccccc, 5, 0, 1, 1);
 }
 
-.chat-message .sender {
+.chat-message .card .sender {
     -fx-font-weight: bold;
 }
 
-.chat-message .message {
+.chat-message .card .message {
     -fx-text-fill: black;
 }
 
-.chat-message .timestamp {
+.chat-message .card .timestamp {
     -fx-text-fill: gray;
     -fx-font-size: 10;
 }
 
-.chat-message.self {
+.chat-message .card.self {
     -fx-background-color: #bad7f2;
     -fx-background-radius: 5 0 0 5;
     -fx-border-color: #4e98de;
@@ -40,7 +49,7 @@
     -fx-effect: dropshadow(gaussian, #cccccc, 5, 0, -1, 1);
 }
 
-.chat-message.server {
+.chat-message .card.server {
     -fx-background-color: white;
     -fx-background-radius: 5;
     -fx-border-color: none;
@@ -49,10 +58,10 @@
     -fx-alignment: center;
 }
 
-.chat-message.server .message {
+.chat-message .card.server .message {
     -fx-text-alignment: center;
 }
-.chat-message.server .message * {
+.chat-message .card.server .message * {
     -fx-fill: gray;
     -fx-font-size: 11;
 }
