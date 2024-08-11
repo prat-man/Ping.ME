@@ -31,6 +31,7 @@ public class FXApplication extends Application {
         Font.loadFont(FXApplication.class.getResourceAsStream("/fonts/OpenSans-Regular.ttf"), 12);
         Font.loadFont(FXApplication.class.getResourceAsStream("/fonts/OpenSans-Bold.ttf"), 12);
         Font.loadFont(FXApplication.class.getResourceAsStream("/fonts/OpenSans-Italic.ttf"), 12);
+        Font.loadFont(FXApplication.class.getResourceAsStream("/fonts/BAUHS93.ttf"), 12);
     }
 
     public static void main(String[] args) {

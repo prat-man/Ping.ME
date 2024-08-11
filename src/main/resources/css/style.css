@@ -2,6 +2,10 @@
     -fx-font-family: 'Open Sans';
 }
 
+.text {
+    -fx-font-smoothing-type: gray;
+}
+
 .chat-scroll {
     -fx-background-color: -fx-box-border, -fx-background;
     -fx-background-insets: -1, 0;
@@ -92,4 +96,15 @@
 .text-input,
 .text-input:focused {
     -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
+}
+
+.app-name {
+    -fx-font-family: 'Bauhaus 93';
+    -fx-font-size: 60;
+    -fx-text-fill: derive(-fx-control-inner-background, -30%);
+}
+
+.dev-name {
+    -fx-font-size: 15;
+    -fx-text-fill: derive(-fx-control-inner-background, -50%);
 }
