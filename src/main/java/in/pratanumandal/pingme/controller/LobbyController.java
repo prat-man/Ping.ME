@@ -13,11 +13,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LobbyController extends AbstractController {
 
-    @FXML private ListView lobby;
+    @FXML private ListView<User> lobby;
 
     @FXML private Label connectedUsers;
-
-    private ListProperty<User> lobbyListProperty;
 
     private AtomicBoolean server;
 
@@ -30,7 +28,7 @@ public class LobbyController extends AbstractController {
             if (user2.isCurrentUser()) return 1;
             return user1.getName().compareTo(user2.getName());
         });
-        lobbyListProperty = new SimpleListProperty<>(sortedList);
+        ListProperty<User> lobbyListProperty = new SimpleListProperty<>(sortedList);
 
         lobby.itemsProperty().bind(lobbyListProperty);
 

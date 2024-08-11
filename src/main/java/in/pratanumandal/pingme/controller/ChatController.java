@@ -1,16 +1,27 @@
 package in.pratanumandal.pingme.controller;
 
+import in.pratanumandal.pingme.common.Constants;
 import in.pratanumandal.pingme.engine.Message;
 import in.pratanumandal.pingme.engine.client.Client;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.fxmisc.flowless.Cell;
+import org.fxmisc.flowless.VirtualFlow;
+import org.fxmisc.flowless.VirtualizedScrollPane;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,15 +31,16 @@ public class ChatController extends AbstractController {
 
     @FXML private TextArea message;
 
+    @FXML private Label characters;
+
     @FXML private Button send;
 
-    @FXML private VBox chat;
+    @FXML private VBox container;
 
-    @FXML private ScrollPane chatScroll;
+    private ObservableList<HBox> messages;
+    private VirtualFlow<HBox, ?> chatPane;
 
     private Client client;
-
-    private AtomicBoolean scrollToBottom;
 
     @FXML
     protected void initialize() {
@@ -49,21 +61,34 @@ public class ChatController extends AbstractController {
             }
         });
 
+        characters.setText(Constants.MAX_MESSAGE_LENGTH + " character(s) remaining");
+        message.setTextFormatter(new TextFormatter<String>(change -> {
+            String text = change.getControlNewText();
+            if (text.length() > Constants.MAX_MESSAGE_LENGTH) {
+                return null;
+            }
+
+            int remaining = Constants.MAX_MESSAGE_LENGTH - text.length();
+            characters.setText(remaining + " character(s) remaining");
+
+            return change;
+        }));
+
         chatState.getMessageList().addListener((ListChangeListener<? super Message>) change -> {
             change.next();
-            List<Message> messageList = (List<Message>) change.getAddedSubList();
+            List<? extends Message> messageList = change.getAddedSubList();
             for (Message message : messageList) {
                 addChatMessage(message);
             }
         });
 
-        scrollToBottom = new AtomicBoolean(false);
-        chat.heightProperty().addListener((observableValue, number, t1) -> {
-            if (scrollToBottom.get()) {
-                chatScroll.setVvalue(1.0);
-                scrollToBottom.set(false);
-            }
-        });
+        messages = FXCollections.observableArrayList();
+        chatPane = VirtualFlow.createVertical(messages, Cell::wrapNode);
+
+        VirtualizedScrollPane<VirtualFlow<HBox, ?>> scrollPane = new VirtualizedScrollPane<>(chatPane);
+        scrollPane.getStyleClass().add("chat-scroll");
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+        container.getChildren().add(scrollPane);
     }
 
     @FXML
@@ -87,10 +112,9 @@ public class ChatController extends AbstractController {
 
     private void addChatMessage(Message message) {
         try {
-            scrollToBottom.set(true);
-
             FXMLLoader loader = new FXMLLoader(ChatController.class.getResource("/fxml/message.fxml"));
-            chat.getChildren().add(loader.load());
+            messages.add(loader.load());
+            chatPane.show(messages.size() - 1);
 
             MessageController controller = loader.getController();
             controller.setMessage(message);

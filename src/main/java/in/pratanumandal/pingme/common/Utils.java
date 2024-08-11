@@ -1,4 +1,4 @@
-package in.pratanumandal.pingme;
+package in.pratanumandal.pingme.common;
 
 import javafx.application.Platform;
 

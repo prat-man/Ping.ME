@@ -19,11 +19,21 @@ public class MessageController extends AbstractController {
 
     @FXML
     protected void initialize() {
+        container.managedProperty().bind(container.visibleProperty());
         sender.managedProperty().bind(sender.visibleProperty());
         timestamp.managedProperty().bind(timestamp.visibleProperty());
+
+        container.setVisible(false);
     }
 
     public void setMessage(Message message) {
+        if (message == null) {
+            container.setVisible(false);
+            return;
+        }
+
+        container.setVisible(true);
+
         if (message.getUser() == null) {
             sender.setText(null);
             sender.setVisible(false);

@@ -2,6 +2,15 @@
     -fx-font-family: 'Open Sans';
 }
 
+.chat-scroll {
+    -fx-background-color: -fx-box-border, -fx-background;
+    -fx-background-insets: -1 0 -1 0, 0 1 0 1;
+}
+
+.chat-message-container {
+    -fx-padding: 4 7 4 7;
+}
+
 .chat-message {
     -fx-background-color: white;
     -fx-background-radius: 0 5 5 0;

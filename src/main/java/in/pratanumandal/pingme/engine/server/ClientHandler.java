@@ -1,6 +1,6 @@
 package in.pratanumandal.pingme.engine.server;
 
-import in.pratanumandal.pingme.Utils;
+import in.pratanumandal.pingme.common.Utils;
 import in.pratanumandal.pingme.engine.ChatState;
 import in.pratanumandal.pingme.engine.User;
 import in.pratanumandal.pingme.engine.packet.ConnectPacket;
