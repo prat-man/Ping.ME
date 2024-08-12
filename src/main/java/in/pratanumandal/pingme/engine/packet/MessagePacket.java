@@ -1,6 +1,6 @@
 package in.pratanumandal.pingme.engine.packet;
 
-import in.pratanumandal.pingme.engine.Message;
+import in.pratanumandal.pingme.engine.entity.Message;
 
 public class MessagePacket implements Packet {
 

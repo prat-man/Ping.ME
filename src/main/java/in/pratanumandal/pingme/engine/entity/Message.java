@@ -1,4 +1,4 @@
-package in.pratanumandal.pingme.engine;
+package in.pratanumandal.pingme.engine.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;

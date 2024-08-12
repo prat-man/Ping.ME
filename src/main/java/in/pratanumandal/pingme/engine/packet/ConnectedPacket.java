@@ -1,6 +1,6 @@
 package in.pratanumandal.pingme.engine.packet;
 
-import in.pratanumandal.pingme.engine.User;
+import in.pratanumandal.pingme.engine.entity.User;
 
 public class ConnectedPacket implements Packet {
 

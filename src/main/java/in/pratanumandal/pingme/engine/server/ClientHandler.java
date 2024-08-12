@@ -1,14 +1,15 @@
 package in.pratanumandal.pingme.engine.server;
 
 import in.pratanumandal.pingme.common.Utils;
-import in.pratanumandal.pingme.engine.ChatState;
-import in.pratanumandal.pingme.engine.User;
+import in.pratanumandal.pingme.state.ChatState;
+import in.pratanumandal.pingme.engine.entity.User;
 import in.pratanumandal.pingme.engine.packet.ConnectPacket;
 import in.pratanumandal.pingme.engine.packet.ConnectedPacket;
 import in.pratanumandal.pingme.engine.packet.DisconnectPacket;
 import in.pratanumandal.pingme.engine.packet.MessagePacket;
 import in.pratanumandal.pingme.engine.packet.Packet;
 import in.pratanumandal.pingme.engine.packet.PacketType;
+import in.pratanumandal.pingme.engine.packet.RemovePacket;
 import in.pratanumandal.pingme.engine.packet.WelcomePacket;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -17,7 +18,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.List;
 
 public class ClientHandler extends Thread {
@@ -52,10 +52,10 @@ public class ClientHandler extends Thread {
     }
 
     public void stopRunning() {
-        this.handleDisconnect();
+        handleRemove();
 
         try {
-            this.wait();
+            this.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -72,11 +72,11 @@ public class ClientHandler extends Thread {
                 handlePacket(packet);
             }
         }
-        catch (SocketException e) {
-            handleDisconnect();
+        catch (IOException e) {
+            // DO NOTHING
         }
-        catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
         finally {
             try {
@@ -127,7 +127,7 @@ public class ClientHandler extends Thread {
             e.printStackTrace();
         }
 
-        server.disconnectClient(this);
+        server.removeClient(this);
 
         Platform.runLater(() -> {
             ChatState.getInstance().getLobbyList().remove(user);
@@ -136,9 +136,26 @@ public class ClientHandler extends Thread {
         broadcastPacket(disconnectPacket);
     }
 
-    private void handleDisconnect() {
-        DisconnectPacket disconnectPacket = new DisconnectPacket(user);
-        handleDisconnect(disconnectPacket);
+    private void handleRemove() {
+        RemovePacket removePacket = new RemovePacket(user);
+
+        sendPacket(removePacket);
+
+        running.set(false);
+
+        try {
+            clientSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        server.removeClient(this);
+
+        Platform.runLater(() -> {
+            ChatState.getInstance().getLobbyList().remove(user);
+        });
+
+        broadcastPacket(removePacket);
     }
 
     private void handleMessage(Packet packet) {

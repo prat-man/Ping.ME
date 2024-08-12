@@ -1,7 +1,8 @@
 package in.pratanumandal.pingme.components;
 
 import in.pratanumandal.pingme.controller.ChatController;
-import in.pratanumandal.pingme.engine.User;
+import in.pratanumandal.pingme.engine.entity.User;
+import in.pratanumandal.pingme.engine.server.Server;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ContextMenu;
@@ -9,9 +10,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Paint;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class UserListCell extends ListCell<User> {
 
@@ -19,9 +22,9 @@ public class UserListCell extends ListCell<User> {
     @FXML private Label name;
     @FXML private Label role;
 
-    private AtomicBoolean server;
+    private final AtomicReference<Server> server;
 
-    public UserListCell(AtomicBoolean server) {
+    public UserListCell(AtomicReference<Server> server) {
         this.server = server;
     }
 
@@ -52,16 +55,16 @@ public class UserListCell extends ListCell<User> {
                 this.setText(null);
                 this.setGraphic(root);
 
-                if (server.get()) {
+                if (server.get() != null) {
                     ContextMenu menu = new ContextMenu();
                     this.setContextMenu(menu);
 
                     MenuItem removeItem = new MenuItem("Remove");
+                    FontIcon fontIcon = new FontIcon("fas-ban");
+                    removeItem.setGraphic(fontIcon);
                     menu.getItems().add(removeItem);
 
-                    removeItem.setOnAction(event -> {
-                        // TODO: Remove the user
-                    });
+                    removeItem.setOnAction(event -> server.get().removeUser(user));
                 }
                 else {
                     this.setContextMenu(null);
@@ -72,4 +75,5 @@ public class UserListCell extends ListCell<User> {
             }
         }
     }
+
 }

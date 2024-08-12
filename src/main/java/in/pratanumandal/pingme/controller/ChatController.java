@@ -1,7 +1,8 @@
 package in.pratanumandal.pingme.controller;
 
 import in.pratanumandal.pingme.common.Constants;
-import in.pratanumandal.pingme.engine.Message;
+import in.pratanumandal.pingme.state.ChatState;
+import in.pratanumandal.pingme.engine.entity.Message;
 import in.pratanumandal.pingme.engine.client.Client;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -25,7 +26,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ChatController extends AbstractController {
+public class ChatController {
 
     @FXML private TextArea message;
 
@@ -72,7 +73,7 @@ public class ChatController extends AbstractController {
             return change;
         }));
 
-        chatState.getMessageList().addListener((ListChangeListener<? super Message>) change -> {
+        ChatState.getInstance().getMessageList().addListener((ListChangeListener<? super Message>) change -> {
             change.next();
             List<? extends Message> messageList = change.getAddedSubList();
             for (Message message : messageList) {
@@ -103,7 +104,7 @@ public class ChatController extends AbstractController {
 
     @FXML
     private void sendMessage() {
-        Message message = new Message(this.chatState.getCurrentUser(), this.message.getText());
+        Message message = new Message(ChatState.getInstance().getCurrentUser(), this.message.getText());
         addChatMessage(message);
         this.message.clear();
         this.message.requestFocus();

@@ -1,7 +1,9 @@
 package in.pratanumandal.pingme.controller;
 
 import in.pratanumandal.pingme.components.UserListCell;
-import in.pratanumandal.pingme.engine.User;
+import in.pratanumandal.pingme.state.ChatState;
+import in.pratanumandal.pingme.engine.entity.User;
+import in.pratanumandal.pingme.engine.server.Server;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.transformation.SortedList;
@@ -9,26 +11,25 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
-public class LobbyController extends AbstractController {
+public class LobbyController {
+
 
     @FXML private ListView<User> lobby;
 
     @FXML private Label connectedUsers;
 
-    private AtomicBoolean server;
+    private final AtomicReference<Server> server = new AtomicReference<>();
 
     @FXML
     protected void initialize() {
-        server = new AtomicBoolean(false);
-
-        SortedList<User> sortedList = new SortedList<>(chatState.getLobbyList(), (user1, user2) -> {
+        SortedList<User> sortedLobbyList = new SortedList<>(ChatState.getInstance().getLobbyList(), (user1, user2) -> {
             if (user1.isCurrentUser()) return -1;
             if (user2.isCurrentUser()) return 1;
             return user1.getName().compareTo(user2.getName());
         });
-        ListProperty<User> lobbyListProperty = new SimpleListProperty<>(sortedList);
+        ListProperty<User> lobbyListProperty = new SimpleListProperty<>(sortedLobbyList);
 
         lobby.itemsProperty().bind(lobbyListProperty);
 
@@ -43,7 +44,7 @@ public class LobbyController extends AbstractController {
         connectedUsers.textProperty().bind(lobbyListProperty.sizeProperty().asString());
     }
 
-    public void setServer(boolean server) {
+    public void setServer(Server server) {
         this.server.set(server);
     }
 

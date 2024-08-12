@@ -1,6 +1,7 @@
-package in.pratanumandal.pingme.engine;
+package in.pratanumandal.pingme.engine.entity;
 
 import in.pratanumandal.pingme.common.ColorSpace;
+import in.pratanumandal.pingme.state.ChatState;
 
 import java.io.Serializable;
 import java.net.InetAddress;

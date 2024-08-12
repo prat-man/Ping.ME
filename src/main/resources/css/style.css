@@ -6,6 +6,21 @@
     -fx-font-smoothing-type: gray;
 }
 
+.ikonli-font-icon {
+    -fx-icon-size: 14px;
+    -fx-icon-color: #333333;
+}
+
+.context-menu {
+    -fx-padding: 5 0 5 0;
+    -fx-background-radius: 3;
+    -fx-min-width: 100;
+}
+
+.menu-item > .graphic-container {
+    -fx-padding: 0 8 0 0;
+}
+
 .chat-scroll {
     -fx-background-color: -fx-box-border, -fx-background;
     -fx-background-insets: -1, 0;
@@ -104,7 +119,7 @@
     -fx-text-fill: derive(-fx-control-inner-background, -30%);
 }
 
-.dev-name {
+.author {
     -fx-font-size: 15;
     -fx-text-fill: derive(-fx-control-inner-background, -50%);
 }

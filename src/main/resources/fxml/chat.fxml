@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+
 <SplitPane fx:id="splitPane" dividerPositions="0.7" orientation="VERTICAL" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="in.pratanumandal.pingme.controller.ChatController">
     <items>
         <VBox fx:id="container">
@@ -22,7 +19,11 @@
                <children>
                   <Label fx:id="characters" />
                   <Region HBox.hgrow="ALWAYS" />
-                      <Button fx:id="send" disable="true" mnemonicParsing="false" onAction="#sendMessage" text="Send" />
+                      <Button fx:id="send" contentDisplay="RIGHT" disable="true" mnemonicParsing="false" onAction="#sendMessage" text="Send">
+                          <graphic>
+                              <FontIcon iconLiteral="far-paper-plane" />
+                          </graphic>
+                      </Button>
                </children>
             </HBox>
             </children>

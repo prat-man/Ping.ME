@@ -8,7 +8,7 @@ import javafx.scene.layout.BorderPane;
 import java.io.IOException;
 import java.net.InetAddress;
 
-public class MainController extends AbstractController implements ModeController.ModeListener {
+public class MainController implements ModeController.ModeListener {
 
     @FXML private BorderPane container;
 

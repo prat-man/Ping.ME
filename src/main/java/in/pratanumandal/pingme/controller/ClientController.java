@@ -1,12 +1,13 @@
 package in.pratanumandal.pingme.controller;
 
+import in.pratanumandal.pingme.state.PrimaryStage;
 import in.pratanumandal.pingme.engine.client.Client;
 import javafx.fxml.FXML;
 
 import java.io.IOException;
 import java.net.InetAddress;
 
-public class ClientController extends AbstractController {
+public class ClientController {
 
     @FXML private ChatController chatController;
 
@@ -20,6 +21,8 @@ public class ClientController extends AbstractController {
             client.connect();
 
             chatController.setClient(client);
+
+            PrimaryStage.getInstance().getStage().setOnCloseRequest(event -> client.disconnect());
         }
         catch (IOException e) {
             throw new RuntimeException(e);

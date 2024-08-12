@@ -1,7 +1,8 @@
 package in.pratanumandal.pingme.engine.client;
 
-import in.pratanumandal.pingme.engine.ChatState;
-import in.pratanumandal.pingme.engine.Message;
+import in.pratanumandal.pingme.state.ChatState;
+import in.pratanumandal.pingme.engine.entity.Message;
+import in.pratanumandal.pingme.engine.packet.RemovePacket;
 import in.pratanumandal.pingme.engine.packet.ConnectPacket;
 import in.pratanumandal.pingme.engine.packet.ConnectedPacket;
 import in.pratanumandal.pingme.engine.packet.DisconnectPacket;
@@ -17,7 +18,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.SocketException;
 
 public class Client extends Thread {
 
@@ -57,10 +57,10 @@ public class Client extends Thread {
                 handlePacket(packet);
             }
         }
-        catch (SocketException e) {
-            handleDisconnect();
+        catch (IOException e) {
+            // DO NOTHING
         }
-        catch (IOException | ClassNotFoundException e) {
+        catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
         finally {
@@ -82,6 +82,9 @@ public class Client extends Thread {
         }
         else if (packet.getType() == PacketType.DISCONNECT) {
             handleDisconnect(packet);
+        }
+        else if (packet.getType() == PacketType.REMOVE) {
+            handleRemoved(packet);
         }
         else if (packet.getType() == PacketType.MESSAGE) {
             handleMessage(packet);
@@ -128,9 +131,24 @@ public class Client extends Thread {
         }
     }
 
-    private void handleDisconnect() {
-        DisconnectPacket disconnectPacket = new DisconnectPacket(null);
-        handleDisconnect(disconnectPacket);
+    private void handleRemoved(Packet packet) {
+        RemovePacket removedPacket = (RemovePacket) packet;
+
+        if (removedPacket.getUser().equals(ChatState.getInstance().getCurrentUser())) {
+            running.set(false);
+
+            Platform.runLater(() -> {
+                Message message = new Message(null, "You have been removed");
+                ChatState.getInstance().getMessageList().add(message);
+            });
+        }
+        else {
+            Platform.runLater(() -> {
+                ChatState.getInstance().getLobbyList().remove(removedPacket.getUser());
+                Message message = new Message(null, removedPacket.getUser().getName() + " has been removed");
+                ChatState.getInstance().getMessageList().add(message);
+            });
+        }
     }
 
     private void handleMessage(Packet packet) {
@@ -152,14 +170,15 @@ public class Client extends Thread {
     }
 
     public void disconnect() {
-        running.set(false);
+        if (isRunning()) {
+            running.set(false);
 
-        try {
-            DisconnectPacket disconnectPacket = new DisconnectPacket();
-            outputStream.writeObject(disconnectPacket);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
+            try {
+                DisconnectPacket disconnectPacket = new DisconnectPacket();
+                outputStream.writeObject(disconnectPacket);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

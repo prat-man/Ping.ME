@@ -1,5 +1,7 @@
-package in.pratanumandal.pingme.engine;
+package in.pratanumandal.pingme.state;
 
+import in.pratanumandal.pingme.engine.entity.Message;
+import in.pratanumandal.pingme.engine.entity.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -32,9 +34,16 @@ public class ChatState {
         return messageList;
     }
 
+    public static void initialize() {
+        if (instance != null) {
+            throw new RuntimeException(ChatState.class.getSimpleName() + " is already initialized");
+        }
+        instance = new ChatState();
+    }
+
     public static ChatState getInstance() {
         if (instance == null) {
-            instance = new ChatState();
+            throw new RuntimeException(PrimaryStage.class.getSimpleName() + " is not initialized");
         }
         return instance;
     }

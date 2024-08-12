@@ -5,6 +5,6 @@ public enum PacketType {
     DISCONNECT,
     WELCOME,
     CONNECTED,
-    REMOVED,
+    REMOVE,
     MESSAGE
 }

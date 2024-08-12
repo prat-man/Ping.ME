@@ -1,6 +1,6 @@
 package in.pratanumandal.pingme.controller;
 
-import in.pratanumandal.pingme.engine.Message;
+import in.pratanumandal.pingme.engine.entity.Message;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -8,7 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class MessageController extends AbstractController {
+public class MessageController {
 
     @FXML private HBox container;
     @FXML private VBox wrapper;

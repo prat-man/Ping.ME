@@ -1,5 +1,8 @@
 package in.pratanumandal.pingme;
 
+import in.pratanumandal.pingme.common.Constants;
+import in.pratanumandal.pingme.state.ChatState;
+import in.pratanumandal.pingme.state.PrimaryStage;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,7 +16,10 @@ public class FXApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        stage.setTitle("Ping.ME");
+        PrimaryStage.initialize(stage);
+        ChatState.initialize();
+
+        stage.setTitle(Constants.APP_NAME);
 
         FXMLLoader fxmlLoader = new FXMLLoader(FXApplication.class.getResource("/fxml/main.fxml"));
         Parent root = fxmlLoader.load();

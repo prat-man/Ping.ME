@@ -1,7 +1,7 @@
 package in.pratanumandal.pingme.engine.packet;
 
-import in.pratanumandal.pingme.engine.ChatState;
-import in.pratanumandal.pingme.engine.User;
+import in.pratanumandal.pingme.state.ChatState;
+import in.pratanumandal.pingme.engine.entity.User;
 
 public class DisconnectPacket implements Packet {
 
