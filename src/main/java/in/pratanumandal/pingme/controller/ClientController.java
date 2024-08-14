@@ -1,7 +1,8 @@
 package in.pratanumandal.pingme.controller;
 
-import in.pratanumandal.pingme.state.PrimaryStage;
+import in.pratanumandal.pingme.common.Constants;
 import in.pratanumandal.pingme.engine.client.Client;
+import in.pratanumandal.pingme.state.PrimaryStage;
 import javafx.fxml.FXML;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ public class ClientController {
             chatController.setClient(client);
 
             PrimaryStage.getInstance().getStage().setOnCloseRequest(event -> client.disconnect());
+            PrimaryStage.getInstance().getStage().setTitle(Constants.APP_NAME + " (Client)");
         }
         catch (IOException e) {
             throw new RuntimeException(e);

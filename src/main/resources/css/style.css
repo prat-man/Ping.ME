@@ -11,6 +11,14 @@
     -fx-icon-color: #333333;
 }
 
+.ikonli-font-icon.incoming {
+    -fx-icon-color: mediumseagreen;
+}
+
+.ikonli-font-icon.outgoing {
+    -fx-icon-color: lightcoral;
+}
+
 .context-menu {
     -fx-padding: 5 0 5 0;
     -fx-background-radius: 3;
@@ -122,4 +130,8 @@
 .author {
     -fx-font-size: 15;
     -fx-text-fill: derive(-fx-control-inner-background, -50%);
+}
+
+.table-column.center {
+    -fx-alignment: center;
 }

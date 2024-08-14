@@ -1,15 +1,15 @@
 package in.pratanumandal.pingme.engine.client;
 
-import in.pratanumandal.pingme.state.ChatState;
 import in.pratanumandal.pingme.engine.entity.Message;
-import in.pratanumandal.pingme.engine.packet.RemovePacket;
 import in.pratanumandal.pingme.engine.packet.ConnectPacket;
-import in.pratanumandal.pingme.engine.packet.ConnectedPacket;
 import in.pratanumandal.pingme.engine.packet.DisconnectPacket;
+import in.pratanumandal.pingme.engine.packet.JoinPacket;
 import in.pratanumandal.pingme.engine.packet.MessagePacket;
 import in.pratanumandal.pingme.engine.packet.Packet;
 import in.pratanumandal.pingme.engine.packet.PacketType;
+import in.pratanumandal.pingme.engine.packet.RemovePacket;
 import in.pratanumandal.pingme.engine.packet.WelcomePacket;
+import in.pratanumandal.pingme.state.ChatState;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 
@@ -77,7 +77,7 @@ public class Client extends Thread {
         if (packet.getType() == PacketType.WELCOME) {
             handleWelcome(packet);
         }
-        else if (packet.getType() == PacketType.CONNECTED) {
+        else if (packet.getType() == PacketType.CONNECT) {
             handleConnected(packet);
         }
         else if (packet.getType() == PacketType.DISCONNECT) {
@@ -102,7 +102,7 @@ public class Client extends Thread {
     }
 
     private void handleConnected(Packet packet) {
-        ConnectedPacket connectedPacket = (ConnectedPacket) packet;
+        ConnectPacket connectedPacket = (ConnectPacket) packet;
 
         Platform.runLater(() -> {
             ChatState.getInstance().getLobbyList().add(connectedPacket.getUser());
@@ -161,7 +161,7 @@ public class Client extends Thread {
 
     public void connect() {
         try {
-            ConnectPacket connectPacket = new ConnectPacket(name);
+            JoinPacket connectPacket = new JoinPacket(name);
             outputStream.writeObject(connectPacket);
         }
         catch (IOException e) {

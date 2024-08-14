@@ -1,9 +1,9 @@
 package in.pratanumandal.pingme.controller;
 
 import in.pratanumandal.pingme.components.UserListCell;
-import in.pratanumandal.pingme.state.ChatState;
 import in.pratanumandal.pingme.engine.entity.User;
 import in.pratanumandal.pingme.engine.server.Server;
+import in.pratanumandal.pingme.state.ChatState;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.transformation.SortedList;

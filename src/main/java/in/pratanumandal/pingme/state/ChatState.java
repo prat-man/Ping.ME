@@ -10,8 +10,8 @@ public class ChatState {
     private static ChatState instance;
 
     private User currentUser;
-    private ObservableList<User> lobbyList;
-    private ObservableList<Message> messageList;
+    private final ObservableList<User> lobbyList;
+    private final ObservableList<Message> messageList;
 
     private ChatState() {
         lobbyList = FXCollections.observableArrayList();

@@ -1,15 +1,17 @@
 package in.pratanumandal.pingme.engine.packet;
 
+import in.pratanumandal.pingme.engine.entity.User;
+
 public class ConnectPacket implements Packet {
 
-    private String name;
+    private User user;
 
-    public ConnectPacket(String name) {
-        this.name = name;
+    public ConnectPacket(User user) {
+        this.user = user;
     }
 
-    public String getName() {
-        return name;
+    public User getUser() {
+        return user;
     }
 
     @Override

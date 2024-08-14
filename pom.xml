@@ -12,7 +12,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <javafx.version>17.0.2</javafx.version>
+        <javafx.version>22.0.2</javafx.version>
         <flowless.version>0.7.3</flowless.version>
         <ikonli.version>12.3.1</ikonli.version>
         <junit.version>5.9.1</junit.version>

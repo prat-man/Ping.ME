@@ -5,9 +5,15 @@ import in.pratanumandal.pingme.engine.packet.DisconnectPacket;
 import in.pratanumandal.pingme.engine.packet.Packet;
 import javafx.beans.property.SimpleBooleanProperty;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +29,29 @@ public class Server extends Thread {
         this.running = new SimpleBooleanProperty(false);
 
         this.setDaemon(true);
+    }
+
+    public String getLocalIPAddress() {
+        try {
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String getPublicIPAddress() {
+        try {
+            URL url = URI.create("https://checkip.amazonaws.com/").toURL();
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()))) {
+                return br.readLine();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String getPort() {
+        return String.valueOf(this.socket.getLocalPort());
     }
 
     public boolean isRunning() {

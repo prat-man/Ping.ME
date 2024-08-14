@@ -1,16 +1,17 @@
 package in.pratanumandal.pingme.engine.server;
 
 import in.pratanumandal.pingme.common.Utils;
-import in.pratanumandal.pingme.state.ChatState;
 import in.pratanumandal.pingme.engine.entity.User;
 import in.pratanumandal.pingme.engine.packet.ConnectPacket;
-import in.pratanumandal.pingme.engine.packet.ConnectedPacket;
 import in.pratanumandal.pingme.engine.packet.DisconnectPacket;
+import in.pratanumandal.pingme.engine.packet.JoinPacket;
 import in.pratanumandal.pingme.engine.packet.MessagePacket;
 import in.pratanumandal.pingme.engine.packet.Packet;
 import in.pratanumandal.pingme.engine.packet.PacketType;
 import in.pratanumandal.pingme.engine.packet.RemovePacket;
 import in.pratanumandal.pingme.engine.packet.WelcomePacket;
+import in.pratanumandal.pingme.state.ChatState;
+import in.pratanumandal.pingme.state.ServerLogs;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 
@@ -89,7 +90,9 @@ public class ClientHandler extends Thread {
     }
 
     private void handlePacket(Packet packet) throws IOException {
-        if (packet.getType() == PacketType.CONNECT) {
+        ServerLogs.getInstance().addLog(ServerLog.Channel.INCOMING, user, packet);
+
+        if (packet.getType() == PacketType.JOIN) {
             handleConnect(packet);
         }
         else if (packet.getType() == PacketType.DISCONNECT) {
@@ -101,7 +104,7 @@ public class ClientHandler extends Thread {
     }
 
     private void handleConnect(Packet packet) {
-        ConnectPacket connectPacket = (ConnectPacket) packet;
+        JoinPacket connectPacket = (JoinPacket) packet;
 
         this.user = new User(connectPacket.getName(), clientSocket.getInetAddress(), clientSocket.getPort());
 
@@ -112,7 +115,7 @@ public class ClientHandler extends Thread {
         WelcomePacket welcomePacket = new WelcomePacket(user, lobbyList);
         sendPacket(welcomePacket);
 
-        ConnectedPacket connectedPacket = new ConnectedPacket(user);
+        ConnectPacket connectedPacket = new ConnectPacket(user);
         broadcastPacket(connectedPacket);
     }
 
@@ -164,6 +167,8 @@ public class ClientHandler extends Thread {
     }
 
     public void sendPacket(Packet packet) {
+        ServerLogs.getInstance().addLog(ServerLog.Channel.OUTGOING, user, packet);
+
         try {
             outputStream.writeObject(packet);
         }

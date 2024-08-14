@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.SplitPane?>
-<SplitPane dividerPositions="0.7, 0.5" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="in.pratanumandal.pingme.controller.ClientController">
+<SplitPane dividerPositions="0.7" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="in.pratanumandal.pingme.controller.ClientController">
    <items>
        <fx:include fx:id="chat" source="chat.fxml" />
        <fx:include fx:id="lobby" source="lobby.fxml" SplitPane.resizableWithParent="false" />

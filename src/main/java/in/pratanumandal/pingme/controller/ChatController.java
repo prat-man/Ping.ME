@@ -1,9 +1,9 @@
 package in.pratanumandal.pingme.controller;
 
 import in.pratanumandal.pingme.common.Constants;
-import in.pratanumandal.pingme.state.ChatState;
-import in.pratanumandal.pingme.engine.entity.Message;
 import in.pratanumandal.pingme.engine.client.Client;
+import in.pratanumandal.pingme.engine.entity.Message;
+import in.pratanumandal.pingme.state.ChatState;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
