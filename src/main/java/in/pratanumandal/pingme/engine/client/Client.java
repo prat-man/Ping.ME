@@ -9,6 +9,8 @@ import in.pratanumandal.pingme.engine.packet.Packet;
 import in.pratanumandal.pingme.engine.packet.PacketType;
 import in.pratanumandal.pingme.engine.packet.RemovePacket;
 import in.pratanumandal.pingme.engine.packet.WelcomePacket;
+import in.pratanumandal.pingme.security.EllipticCurveDiffieHellmanAES;
+import in.pratanumandal.pingme.security.SecureObject;
 import in.pratanumandal.pingme.state.ChatState;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -25,7 +27,7 @@ public class Client extends Thread {
     private Socket clientSocket;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
-
+    private EllipticCurveDiffieHellmanAES ecdhaes;
     private SimpleBooleanProperty running;
 
     public Client(String name, InetAddress address, int port) throws IOException {
@@ -33,6 +35,7 @@ public class Client extends Thread {
         this.clientSocket = new Socket(address, port);
         this.outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
         this.inputStream = new ObjectInputStream(clientSocket.getInputStream());
+        this.ecdhaes = new EllipticCurveDiffieHellmanAES();
         this.running = new SimpleBooleanProperty(false);
 
         this.setDaemon(true);
@@ -53,6 +56,9 @@ public class Client extends Thread {
         try {
             Object object;
             while (running.get() && (object = inputStream.readObject()) != null) {
+                if (ecdhaes.isReady()) {
+                    object = ecdhaes.decrypt((SecureObject) object);
+                }
                 Packet packet = (Packet) object;
                 handlePacket(packet);
             }
@@ -78,13 +84,13 @@ public class Client extends Thread {
             handleWelcome(packet);
         }
         else if (packet.getType() == PacketType.CONNECT) {
-            handleConnected(packet);
+            handleConnect(packet);
         }
         else if (packet.getType() == PacketType.DISCONNECT) {
             handleDisconnect(packet);
         }
         else if (packet.getType() == PacketType.REMOVE) {
-            handleRemoved(packet);
+            handleRemove(packet);
         }
         else if (packet.getType() == PacketType.MESSAGE) {
             handleMessage(packet);
@@ -99,9 +105,11 @@ public class Client extends Thread {
             ChatState.getInstance().getLobbyList().clear();
             ChatState.getInstance().getLobbyList().addAll(welcomePacket.getLobbyList());
         });
+
+        ecdhaes.setReceiverPublicKey(welcomePacket.getPublicKey());
     }
 
-    private void handleConnected(Packet packet) {
+    private void handleConnect(Packet packet) {
         ConnectPacket connectedPacket = (ConnectPacket) packet;
 
         Platform.runLater(() -> {
@@ -131,7 +139,7 @@ public class Client extends Thread {
         }
     }
 
-    private void handleRemoved(Packet packet) {
+    private void handleRemove(Packet packet) {
         RemovePacket removedPacket = (RemovePacket) packet;
 
         if (removedPacket.getUser().equals(ChatState.getInstance().getCurrentUser())) {
@@ -160,32 +168,31 @@ public class Client extends Thread {
     }
 
     public void connect() {
-        try {
-            JoinPacket connectPacket = new JoinPacket(name);
-            outputStream.writeObject(connectPacket);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        JoinPacket joinPacket = new JoinPacket(name, ecdhaes.getPublicKey());
+        sendPacket(joinPacket);
     }
 
     public void disconnect() {
         if (isRunning()) {
             running.set(false);
 
-            try {
-                DisconnectPacket disconnectPacket = new DisconnectPacket();
-                outputStream.writeObject(disconnectPacket);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            DisconnectPacket disconnectPacket = new DisconnectPacket();
+            sendPacket(disconnectPacket);
         }
     }
 
     public void sendMessage(Message message) {
+        MessagePacket messagePacket = new MessagePacket(message);
+        sendPacket(messagePacket);
+    }
+
+    public void sendPacket(Packet packet) {
         try {
-            MessagePacket messagePacket = new MessagePacket(message);
-            outputStream.writeObject(messagePacket);
+            Object object = packet;
+            if (ecdhaes.isReady()) {
+                object = ecdhaes.encrypt(object);
+            }
+            outputStream.writeObject(object);
         }
         catch (IOException e) {
             e.printStackTrace();

@@ -10,6 +10,8 @@ import in.pratanumandal.pingme.engine.packet.Packet;
 import in.pratanumandal.pingme.engine.packet.PacketType;
 import in.pratanumandal.pingme.engine.packet.RemovePacket;
 import in.pratanumandal.pingme.engine.packet.WelcomePacket;
+import in.pratanumandal.pingme.security.EllipticCurveDiffieHellmanAES;
+import in.pratanumandal.pingme.security.SecureObject;
 import in.pratanumandal.pingme.state.ChatState;
 import in.pratanumandal.pingme.state.ServerLogs;
 import javafx.application.Platform;
@@ -26,15 +28,17 @@ public class ClientHandler extends Thread {
     private User user;
     private Server server;
     private Socket clientSocket;
-    private SimpleBooleanProperty running;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
+    private EllipticCurveDiffieHellmanAES ecdhaes;
+    private SimpleBooleanProperty running;
 
     public ClientHandler(Server server, Socket clientSocket) throws IOException {
         this.server = server;
         this.clientSocket = clientSocket;
         this.outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
         this.inputStream = new ObjectInputStream(clientSocket.getInputStream());
+        this.ecdhaes = new EllipticCurveDiffieHellmanAES();
         this.running = new SimpleBooleanProperty(false);
 
         this.setDaemon(true);
@@ -69,6 +73,9 @@ public class ClientHandler extends Thread {
         try {
             Object object;
             while (running.get() && (object = inputStream.readObject()) != null) {
+                if (ecdhaes.isReady()) {
+                    object = ecdhaes.decrypt((SecureObject) object);
+                }
                 Packet packet = (Packet) object;
                 handlePacket(packet);
             }
@@ -93,7 +100,7 @@ public class ClientHandler extends Thread {
         ServerLogs.getInstance().addLog(ServerLog.Channel.INCOMING, user, packet);
 
         if (packet.getType() == PacketType.JOIN) {
-            handleConnect(packet);
+            handleJoin(packet);
         }
         else if (packet.getType() == PacketType.DISCONNECT) {
             handleDisconnect(packet);
@@ -103,20 +110,21 @@ public class ClientHandler extends Thread {
         }
     }
 
-    private void handleConnect(Packet packet) {
+    private void handleJoin(Packet packet) {
         JoinPacket connectPacket = (JoinPacket) packet;
 
-        this.user = new User(connectPacket.getName(), clientSocket.getInetAddress(), clientSocket.getPort());
+        user = new User(connectPacket.getName(), clientSocket.getInetAddress(), clientSocket.getPort());
 
         List<User> lobbyList = ChatState.getInstance().getLobbyList();
-
         Utils.runAndWait(() -> lobbyList.add(user));
 
-        WelcomePacket welcomePacket = new WelcomePacket(user, lobbyList);
+        WelcomePacket welcomePacket = new WelcomePacket(user, lobbyList, ecdhaes.getPublicKey());
         sendPacket(welcomePacket);
 
         ConnectPacket connectedPacket = new ConnectPacket(user);
         broadcastPacket(connectedPacket);
+
+        ecdhaes.setReceiverPublicKey(connectPacket.getPublicKey());
     }
 
     private void handleDisconnect(Packet packet) {
@@ -170,7 +178,11 @@ public class ClientHandler extends Thread {
         ServerLogs.getInstance().addLog(ServerLog.Channel.OUTGOING, user, packet);
 
         try {
-            outputStream.writeObject(packet);
+            Object object = packet;
+            if (ecdhaes.isReady()) {
+                object = ecdhaes.encrypt(object);
+            }
+            outputStream.writeObject(object);
         }
         catch (IOException e) {
             e.printStackTrace();

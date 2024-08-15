@@ -1,6 +1,7 @@
 module in.pratanumandal.pingme {
     requires javafx.controls;
     requires javafx.fxml;
+    requires org.bouncycastle.provider;
 
     requires org.fxmisc.flowless;
     requires org.kordamp.ikonli.javafx;
