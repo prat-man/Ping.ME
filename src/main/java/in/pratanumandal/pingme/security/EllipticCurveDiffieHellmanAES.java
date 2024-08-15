@@ -1,7 +1,5 @@
 package in.pratanumandal.pingme.security;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -13,14 +11,12 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
-import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.SecureRandom;
-import java.security.Security;
 
 public class EllipticCurveDiffieHellmanAES {
 
@@ -28,26 +24,23 @@ public class EllipticCurveDiffieHellmanAES {
     private PublicKey publicKey;
     private KeyAgreement keyAgreement;
     private byte[] sharedSecret;
+    private byte[] secretKey;
 
     public EllipticCurveDiffieHellmanAES() {
-        Security.addProvider(new BouncyCastleProvider());
-
         this.random = new SecureRandom();
         generateKeyExchangeParams();
     }
 
     private void generateKeyExchangeParams() {
         try {
-            KeyPairGenerator kpg = KeyPairGenerator.getInstance("EC", "BC");
+            KeyPairGenerator kpg = KeyPairGenerator.getInstance("EC");
             kpg.initialize(256);
             KeyPair kp = kpg.generateKeyPair();
             publicKey = kp.getPublic();
             keyAgreement = KeyAgreement.getInstance("ECDH");
             keyAgreement.init(kp.getPrivate());
         }
-        catch (NoSuchAlgorithmException |
-               InvalidKeyException |
-               NoSuchProviderException e) {
+        catch (NoSuchAlgorithmException | InvalidKeyException e) {
             e.printStackTrace();
         }
     }
@@ -56,8 +49,10 @@ public class EllipticCurveDiffieHellmanAES {
         try {
             keyAgreement.doPhase(publicKey, true);
             sharedSecret = keyAgreement.generateSecret();
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            secretKey = messageDigest.digest(sharedSecret);
         }
-        catch (InvalidKeyException e) {
+        catch (InvalidKeyException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
     }
@@ -68,10 +63,6 @@ public class EllipticCurveDiffieHellmanAES {
 
     public PublicKey getPublicKey() {
         return publicKey;
-    }
-
-    protected Key generateKey() {
-        return new SecretKeySpec(sharedSecret, "AES");
     }
 
     protected byte[] generateIV() {
@@ -89,8 +80,11 @@ public class EllipticCurveDiffieHellmanAES {
             byte[] iv = generateIV();
             GCMParameterSpec gcmSpec = new GCMParameterSpec(128, iv);
 
+            // secret key
+            SecretKeySpec keySpec = new SecretKeySpec(secretKey, "AES");
+
             // initialize cipher
-            cipher.init(Cipher.ENCRYPT_MODE, generateKey(), gcmSpec);
+            cipher.init(Cipher.ENCRYPT_MODE, keySpec, gcmSpec);
 
             // encrypt
             return new SecureObject((Serializable) object, cipher, iv);
@@ -114,8 +108,11 @@ public class EllipticCurveDiffieHellmanAES {
             byte[] iv = secureObject.getIV();
             GCMParameterSpec gcmSpec = new GCMParameterSpec(128, iv);
 
+            // secret key
+            SecretKeySpec keySpec = new SecretKeySpec(secretKey, "AES");
+
             // initialize cipher
-            cipher.init(Cipher.DECRYPT_MODE, generateKey(), gcmSpec);
+            cipher.init(Cipher.DECRYPT_MODE, keySpec, gcmSpec);
 
             // decrypt
             return secureObject.getObject(cipher);
