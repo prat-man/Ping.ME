@@ -6,8 +6,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
-<HBox fx:id="container" styleClass="chat-message" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="in.pratanumandal.pingme.controller.MessageController">
+
+<HBox fx:id="container" spacing="4.0" styleClass="chat-message" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="in.pratanumandal.pingme.controller.MessageController">
    <children>
+      <VBox fx:id="icon">
+         <children>
+            <HBox fx:id="avatarBox" />
+         </children>
+      </VBox>
       <VBox fx:id="wrapper" spacing="3.0" styleClass="card">
          <children>
             <Label fx:id="sender" styleClass="sender" />

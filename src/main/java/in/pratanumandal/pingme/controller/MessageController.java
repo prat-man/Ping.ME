@@ -1,5 +1,6 @@
 package in.pratanumandal.pingme.controller;
 
+import in.pratanumandal.pingme.components.Avatar;
 import in.pratanumandal.pingme.engine.entity.Message;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -11,8 +12,11 @@ import javafx.scene.text.Text;
 public class MessageController {
 
     @FXML private HBox container;
-    @FXML private VBox wrapper;
 
+    @FXML private VBox icon;
+    @FXML private HBox avatarBox;
+
+    @FXML private VBox wrapper;
     @FXML private Label sender;
     @FXML private Text message;
     @FXML private Label timestamp;
@@ -20,10 +24,16 @@ public class MessageController {
     @FXML
     protected void initialize() {
         container.managedProperty().bind(container.visibleProperty());
+        icon.managedProperty().bind(icon.visibleProperty());
         sender.managedProperty().bind(sender.visibleProperty());
         timestamp.managedProperty().bind(timestamp.visibleProperty());
 
         container.setVisible(false);
+
+        Avatar avatar = new Avatar();
+        avatar.randomImage();
+        avatar.setPrefSize(30, 30);
+        avatarBox.getChildren().add(avatar);
     }
 
     public void setMessage(Message message) {
@@ -35,6 +45,7 @@ public class MessageController {
         container.setVisible(true);
 
         if (message.getUser() == null) {
+            icon.setVisible(false);
             sender.setText(null);
             sender.setVisible(false);
             timestamp.setVisible(false);
@@ -44,6 +55,7 @@ public class MessageController {
             wrapper.getStyleClass().add("server");
         }
         else if (message.getUser().isCurrentUser()) {
+            icon.setVisible(false);
             sender.setText(null);
             sender.setVisible(false);
             timestamp.setVisible(true);
@@ -53,6 +65,7 @@ public class MessageController {
             wrapper.getStyleClass().add("self");
         }
         else {
+            icon.setVisible(true);
             sender.setText("~ " + message.getUser().getName());
             sender.setStyle("-fx-text-fill: " + message.getUser().getColor());
             sender.setVisible(true);
