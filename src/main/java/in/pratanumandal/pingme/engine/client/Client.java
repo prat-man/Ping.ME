@@ -14,6 +14,7 @@ import in.pratanumandal.pingme.security.SecureObject;
 import in.pratanumandal.pingme.state.ChatState;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -24,14 +25,16 @@ import java.net.Socket;
 public class Client extends Thread {
 
     private String name;
+    private Image avatar;
     private Socket clientSocket;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
     private EllipticCurveDiffieHellmanAES ecdhaes;
     private SimpleBooleanProperty running;
 
-    public Client(String name, InetAddress address, int port) throws IOException {
+    public Client(String name, Image avatar, InetAddress address, int port) throws IOException {
         this.name = name;
+        this.avatar = avatar;
         this.clientSocket = new Socket(address, port);
         this.outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
         this.inputStream = new ObjectInputStream(clientSocket.getInputStream());
@@ -168,7 +171,7 @@ public class Client extends Thread {
     }
 
     public void connect() {
-        JoinPacket joinPacket = new JoinPacket(name, ecdhaes.getPublicKey());
+        JoinPacket joinPacket = new JoinPacket(name, avatar, ecdhaes.getPublicKey());
         sendPacket(joinPacket);
     }
 

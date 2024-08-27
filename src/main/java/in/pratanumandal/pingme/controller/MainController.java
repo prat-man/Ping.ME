@@ -3,6 +3,7 @@ package in.pratanumandal.pingme.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
@@ -38,14 +39,14 @@ public class MainController implements ModeController.ModeListener {
     }
 
     @Override
-    public void client(String name, InetAddress address, int port) {
+    public void client(String name, Image avatar, InetAddress address, int port) {
         try {
             FXMLLoader loader = new FXMLLoader(MainController.class.getResource("/fxml/client.fxml"));
             Node root = loader.load();
             container.setCenter(root);
 
             ClientController controller = loader.getController();
-            controller.connect(name, address, port);
+            controller.connect(name, avatar, address, port);
         }
         catch (IOException e) {
             throw new RuntimeException(e);

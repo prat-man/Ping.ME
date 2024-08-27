@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.PopOver;
@@ -36,6 +37,7 @@ public class ModeController {
 
     @FXML private VBox client;
     @FXML private HBox avatarBox;
+    @FXML private Avatar avatar;
     @FXML private TextField clientName;
     @FXML private TextField clientAddress;
     @FXML private TextField clientPort;
@@ -66,7 +68,7 @@ public class ModeController {
         server.managedProperty().bind(server.visibleProperty());
         client.managedProperty().bind(client.visibleProperty());
 
-        Avatar avatar = new Avatar();
+        avatar = new Avatar();
         avatar.randomImage();
         avatar.setPrefSize(100, 100);
         avatarBox.getChildren().add(avatar);
@@ -116,6 +118,8 @@ public class ModeController {
             }
             String name = clientName.getText();
 
+            Image image = avatar.getImage();
+
             InetAddress address = InetAddress.getLocalHost();
             if (!clientAddress.getText().isBlank()) {
                 address = InetAddress.getByName(clientAddress.getText());
@@ -126,7 +130,7 @@ public class ModeController {
                 port = Integer.parseInt(clientPort.getText());
             }
 
-            listener.client(name, address, port);
+            listener.client(name, image, address, port);
         }
     }
 
@@ -134,7 +138,7 @@ public class ModeController {
 
         void server(int port);
 
-        void client(String name, InetAddress address, int port);
+        void client(String name, Image image, InetAddress address, int port);
 
     }
 

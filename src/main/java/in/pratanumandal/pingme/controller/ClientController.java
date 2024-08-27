@@ -4,6 +4,7 @@ import in.pratanumandal.pingme.common.Constants;
 import in.pratanumandal.pingme.engine.client.Client;
 import in.pratanumandal.pingme.state.PrimaryStage;
 import javafx.fxml.FXML;
+import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -14,9 +15,9 @@ public class ClientController {
 
     private Client client;
 
-    public void connect(String name, InetAddress address, int port) {
+    public void connect(String name, Image image, InetAddress address, int port) {
         try {
-            client = new Client(name, address, port);
+            client = new Client(name, image, address, port);
             client.start();
 
             client.connect();

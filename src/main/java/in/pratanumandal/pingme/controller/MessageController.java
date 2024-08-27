@@ -15,6 +15,7 @@ public class MessageController {
 
     @FXML private VBox icon;
     @FXML private HBox avatarBox;
+    @FXML private Avatar avatar;
 
     @FXML private VBox wrapper;
     @FXML private Label sender;
@@ -30,8 +31,7 @@ public class MessageController {
 
         container.setVisible(false);
 
-        Avatar avatar = new Avatar();
-        avatar.randomImage();
+        avatar = new Avatar();
         avatar.setPrefSize(30, 30);
         avatarBox.getChildren().add(avatar);
     }
@@ -45,6 +45,7 @@ public class MessageController {
         container.setVisible(true);
 
         if (message.getUser() == null) {
+            avatar.setImage(null);
             icon.setVisible(false);
             sender.setText(null);
             sender.setVisible(false);
@@ -55,6 +56,7 @@ public class MessageController {
             wrapper.getStyleClass().add("server");
         }
         else if (message.getUser().isCurrentUser()) {
+            avatar.setImage(null);
             icon.setVisible(false);
             sender.setText(null);
             sender.setVisible(false);
@@ -65,6 +67,7 @@ public class MessageController {
             wrapper.getStyleClass().add("self");
         }
         else {
+            avatar.setImage(message.getUser().getAvatar());
             icon.setVisible(true);
             sender.setText("~ " + message.getUser().getName());
             sender.setStyle("-fx-text-fill: " + message.getUser().getColor());

@@ -2,6 +2,7 @@ package in.pratanumandal.pingme.engine.entity;
 
 import in.pratanumandal.pingme.common.ColorSpace;
 import in.pratanumandal.pingme.state.ChatState;
+import javafx.scene.image.Image;
 
 import java.io.Serializable;
 import java.net.InetAddress;
@@ -14,16 +15,16 @@ public class User implements Serializable {
 
     private final UUID id;
     private final String name;
-    private final int avatar;
+    private final ChatImage avatar;
     private final String color;
     private final transient InetAddress address;
     private final transient int port;
 
 
-    public User(String name, int avatar, InetAddress address, int port) {
+    public User(String name, Image avatar, InetAddress address, int port) {
         this.id = UUID.randomUUID();
         this.name = name;
-        this.avatar = avatar;
+        this.avatar = new ChatImage(avatar);
         this.color = colorSpace.generateColor();
         this.address = address;
         this.port = port;
@@ -37,8 +38,8 @@ public class User implements Serializable {
         return name;
     }
 
-    public int getAvatar() {
-        return avatar;
+    public Image getAvatar() {
+        return avatar.getImage();
     }
 
     public String getColor() {

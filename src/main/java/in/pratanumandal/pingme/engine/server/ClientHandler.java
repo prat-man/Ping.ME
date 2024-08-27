@@ -111,9 +111,9 @@ public class ClientHandler extends Thread {
     }
 
     private void handleJoin(Packet packet) {
-        JoinPacket connectPacket = (JoinPacket) packet;
+        JoinPacket joinPacket = (JoinPacket) packet;
 
-        user = new User(connectPacket.getName(), 0, clientSocket.getInetAddress(), clientSocket.getPort());
+        user = new User(joinPacket.getName(), joinPacket.getAvatar(), clientSocket.getInetAddress(), clientSocket.getPort());
 
         List<User> lobbyList = ChatState.getInstance().getLobbyList();
         Utils.runAndWait(() -> lobbyList.add(user));
@@ -124,7 +124,7 @@ public class ClientHandler extends Thread {
         ConnectPacket connectedPacket = new ConnectPacket(user);
         broadcastPacket(connectedPacket);
 
-        ecdhaes.setReceiverPublicKey(connectPacket.getPublicKey());
+        ecdhaes.setReceiverPublicKey(joinPacket.getPublicKey());
     }
 
     private void handleDisconnect(Packet packet) {
