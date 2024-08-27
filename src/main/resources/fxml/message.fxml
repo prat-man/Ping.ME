@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
-<HBox fx:id="container" styleClass="chat-message" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="in.pratanumandal.pingme.controller.MessageController">
+<HBox fx:id="container" styleClass="chat-message" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="in.pratanumandal.pingme.controller.MessageController">
    <children>
       <VBox fx:id="wrapper" spacing="3.0" styleClass="card">
          <children>

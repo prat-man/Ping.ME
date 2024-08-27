@@ -12,18 +12,21 @@ public class User implements Serializable {
 
     private static final ColorSpace colorSpace = new ColorSpace();
 
-    private UUID id;
-    private String name;
-    private transient InetAddress address;
-    private transient int port;
-    private String color;
+    private final UUID id;
+    private final String name;
+    private final int avatar;
+    private final String color;
+    private final transient InetAddress address;
+    private final transient int port;
 
-    public User(String name, InetAddress address, int port) {
+
+    public User(String name, int avatar, InetAddress address, int port) {
         this.id = UUID.randomUUID();
         this.name = name;
+        this.avatar = avatar;
+        this.color = colorSpace.generateColor();
         this.address = address;
         this.port = port;
-        this.color = colorSpace.generateColor();
     }
 
     public UUID getId() {
@@ -34,16 +37,20 @@ public class User implements Serializable {
         return name;
     }
 
+    public int getAvatar() {
+        return avatar;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
     public InetAddress getAddress() {
         return address;
     }
 
     public int getPort() {
         return port;
-    }
-
-    public String getColor() {
-        return color;
     }
 
     public boolean isCurrentUser() {

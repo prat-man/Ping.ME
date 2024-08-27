@@ -1,55 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
-<VBox alignment="CENTER" fillWidth="false" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="in.pratanumandal.pingme.controller.ModeController">
-   <Label fx:id="appName" styleClass="app-name" />
-   <Label fx:id="author" styleClass="author" />
-   <TitledPane collapsible="false" text="Connect">
-      <content>
-         <HBox spacing="50.0">
-            <children>
-                 <VBox prefWidth="250.0" spacing="7.0">
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.controlsfx.control.*?>
+
+<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="in.pratanumandal.pingme.controller.ModeController">
+   <children>
+      <HBox fx:id="container" alignment="CENTER" fillHeight="false" spacing="40.0">
+         <children>
+            <VBox alignment="CENTER" spacing="20.0">
+               <children>
+                  <Label fx:id="appName" styleClass="app-name" />
+                  <Label fx:id="author" styleClass="author" />
+                   <SegmentedButton fx:id="modeButton">
+                       <buttons>
+                           <ToggleButton text="Server" />
+                           <ToggleButton selected="true" text="Client" />
+                       </buttons>
+                     <VBox.margin>
+                        <Insets top="40.0" />
+                     </VBox.margin>
+                   </SegmentedButton>
+               </children>
+            </VBox>
+            <Separator fx:id="separator" orientation="VERTICAL" />
+            <VBox alignment="CENTER" fillWidth="false" spacing="20.0">
+                 <VBox fx:id="server" prefWidth="250.0" spacing="10.0">
                      <padding>
                          <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
                      </padding>
                      <children>
                          <TextField fx:id="serverPort" promptText="Port" />
-                     <Region VBox.vgrow="ALWAYS" />
-                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#server" text="Server">
-                             <VBox.margin>
-                                 <Insets top="20.0" />
-                             </VBox.margin>
-                         </Button>
+                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#server" text="Create">
+                        <VBox.margin>
+                           <Insets top="20.0" />
+                        </VBox.margin></Button>
                      </children>
                  </VBox>
-               <Separator orientation="VERTICAL" prefHeight="160.0" />
-                 <VBox prefWidth="250.0" spacing="7.0">
+                 <VBox fx:id="client" prefWidth="250.0" spacing="10.0">
                      <padding>
                          <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
                      </padding>
                      <children>
+                         <HBox fx:id="avatarBox" alignment="CENTER">
+                        <VBox.margin>
+                           <Insets bottom="20.0" />
+                        </VBox.margin></HBox>
                          <TextField fx:id="clientName" promptText="Name" />
                          <TextField fx:id="clientAddress" layoutX="17.0" layoutY="17.0" promptText="IP Address" />
                          <TextField fx:id="clientPort" layoutX="17.0" layoutY="50.0" promptText="Port" />
-                     <Region VBox.vgrow="ALWAYS" />
-                         <Button fx:id="clientButton" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#client" text="Client" />
+                         <Button fx:id="clientButton" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#client" text="Join">
+                        <VBox.margin>
+                           <Insets top="20.0" />
+                        </VBox.margin></Button>
                      </children>
                  </VBox>
-            </children>
-         </HBox>
-      </content>
-      <VBox.margin>
-         <Insets top="20.0" />
-      </VBox.margin>
-   </TitledPane>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>

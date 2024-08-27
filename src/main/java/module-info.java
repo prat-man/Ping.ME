@@ -3,7 +3,9 @@ module in.pratanumandal.pingme {
     requires javafx.fxml;
 
     requires org.fxmisc.flowless;
+    requires org.controlsfx.controls;
     requires org.kordamp.ikonli.javafx;
+    requires GNAvatarView;
 
     opens in.pratanumandal.pingme to javafx.fxml;
     opens in.pratanumandal.pingme.controller to javafx.fxml;

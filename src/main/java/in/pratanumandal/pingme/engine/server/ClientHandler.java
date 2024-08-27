@@ -113,7 +113,7 @@ public class ClientHandler extends Thread {
     private void handleJoin(Packet packet) {
         JoinPacket connectPacket = (JoinPacket) packet;
 
-        user = new User(connectPacket.getName(), clientSocket.getInetAddress(), clientSocket.getPort());
+        user = new User(connectPacket.getName(), 0, clientSocket.getInetAddress(), clientSocket.getPort());
 
         List<User> lobbyList = ChatState.getInstance().getLobbyList();
         Utils.runAndWait(() -> lobbyList.add(user));
