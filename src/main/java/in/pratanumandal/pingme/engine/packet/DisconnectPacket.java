@@ -1,22 +1,23 @@
 package in.pratanumandal.pingme.engine.packet;
 
+import in.pratanumandal.pingme.engine.entity.AuthenticatedUser;
 import in.pratanumandal.pingme.engine.entity.User;
 import in.pratanumandal.pingme.state.ChatState;
 
 public class DisconnectPacket implements Packet {
 
-    private User user;
+    private final AuthenticatedUser user;
 
     public DisconnectPacket() {
         this(ChatState.getInstance().getCurrentUser());
     }
 
     public DisconnectPacket(User user) {
-        this.user = user;
+        this.user = new AuthenticatedUser(user);
     }
 
     public User getUser() {
-        return user;
+        return user.getUser();
     }
 
     @Override

@@ -45,7 +45,7 @@ public class Avatar extends GNAvatarView {
     public void setImage(int index) {
         try (InputStream inputStream = FXApplication.class.getResourceAsStream("/images/avatars/" + index + ".png")) {
             assert inputStream != null;
-            Image image = new Image(inputStream, 256, 256, false, true);
+            Image image = new Image(inputStream);
             super.setImage(image);
         }
         catch (IOException e) {

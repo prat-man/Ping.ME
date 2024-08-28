@@ -4,7 +4,7 @@ import in.pratanumandal.pingme.engine.entity.Message;
 
 public class MessagePacket implements Packet {
 
-    private Message message;
+    private final Message message;
 
     public MessagePacket(Message message) {
         this.message = message;

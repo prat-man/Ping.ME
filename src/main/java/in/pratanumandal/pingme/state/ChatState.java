@@ -5,6 +5,9 @@ import in.pratanumandal.pingme.engine.entity.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.Optional;
+import java.util.UUID;
+
 public class ChatState {
 
     private static ChatState instance;
@@ -32,6 +35,12 @@ public class ChatState {
 
     public ObservableList<Message> getMessageList() {
         return messageList;
+    }
+
+    public User getUser(UUID userId) {
+        if (userId == null) return null;
+        Optional<User> optionalUser = lobbyList.stream().filter(user -> user.getId().equals(userId)).findFirst();
+        return optionalUser.orElse(null);
     }
 
     public static void initialize() {

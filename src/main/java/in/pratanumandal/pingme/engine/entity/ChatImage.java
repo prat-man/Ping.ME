@@ -23,8 +23,6 @@ public class ChatImage implements Serializable {
         imageBytes = new byte[width * height * 4];
         WritablePixelFormat<ByteBuffer> pixelFormat = WritablePixelFormat.getByteBgraInstance();
         pixelReader.getPixels(0, 0, width, height, pixelFormat, imageBytes, 0, width * 4);
-
-        System.out.println(imageBytes.length);
     }
 
     public Image getImage() {

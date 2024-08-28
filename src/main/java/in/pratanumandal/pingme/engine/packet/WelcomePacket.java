@@ -8,18 +8,18 @@ import java.util.List;
 
 public class WelcomePacket implements Packet {
 
-    private User currentUser;
-    private List<User> lobbyList;
-    private PublicKey publicKey;
+    private final User user;
+    private final List<User> lobbyList;
+    private final PublicKey publicKey;
 
-    public WelcomePacket(User currentUser, List<User> lobbyList, PublicKey publicKey) {
-        this.currentUser = currentUser;
+    public WelcomePacket(User user, List<User> lobbyList, PublicKey publicKey) {
+        this.user = user;
         this.lobbyList = new ArrayList<>(lobbyList);
         this.publicKey = publicKey;
     }
 
-    public User getCurrentUser() {
-        return currentUser;
+    public User getUser() {
+        return user;
     }
 
     public List<User> getLobbyList() {

@@ -104,7 +104,7 @@ public class Client extends Thread {
         WelcomePacket welcomePacket = (WelcomePacket) packet;
 
         Platform.runLater(() -> {
-            ChatState.getInstance().setCurrentUser(welcomePacket.getCurrentUser());
+            ChatState.getInstance().setCurrentUser(welcomePacket.getUser());
             ChatState.getInstance().getLobbyList().clear();
             ChatState.getInstance().getLobbyList().addAll(welcomePacket.getLobbyList());
         });

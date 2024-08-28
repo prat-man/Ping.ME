@@ -10,18 +10,19 @@ public class Message implements Serializable {
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy | hh:mm a");
     private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
 
-    private User user;
-    private String message;
-    private LocalDateTime timestamp;
+
+    private final AuthenticatedUser user;
+    private final String message;
+    private final LocalDateTime timestamp;
 
     public Message(User user, String message) {
-        this.user = user;
+        this.user = new AuthenticatedUser(user);
         this.message = message;
         this.timestamp = LocalDateTime.now();
     }
 
     public User getUser() {
-        return user;
+        return user.getUser();
     }
 
     public String getMessage() {

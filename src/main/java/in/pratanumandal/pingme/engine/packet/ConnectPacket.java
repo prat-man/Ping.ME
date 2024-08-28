@@ -4,7 +4,7 @@ import in.pratanumandal.pingme.engine.entity.User;
 
 public class ConnectPacket implements Packet {
 
-    private User user;
+    private final User user;
 
     public ConnectPacket(User user) {
         this.user = user;
