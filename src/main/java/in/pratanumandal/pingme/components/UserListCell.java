@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class UserListCell extends ListCell<User> {
 
-    @FXML private Label indicator;
+    @FXML private HBox avatarBox;
     @FXML private Label name;
     @FXML private Label role;
 
@@ -41,11 +41,13 @@ public class UserListCell extends ListCell<User> {
                 loader.setController(this);
                 HBox root = loader.load();
 
-                indicator.setStyle("-fx-text-fill: " + user.getColor());
-                indicator.setVisible(!user.isCurrentUser());
+                Avatar avatar = new Avatar();
+                avatar.setImage(user.getAvatar());
+                avatar.setPrefSize(30, 30);
+                avatarBox.getChildren().add(avatar);
 
                 name.setText(user.getName());
-                if (this.isSelected() || user.isCurrentUser()) name.setStyle(null);
+                if (this.isSelected()) name.setStyle(null);
                 else name.setStyle("-fx-text-fill: " + user.getColor());
 
                 if (user.isCurrentUser()) role.setText("you");

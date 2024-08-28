@@ -3,7 +3,6 @@ package in.pratanumandal.pingme.components;
 import in.pratanumandal.pingme.FXApplication;
 import io.github.gleidson28.AvatarType;
 import io.github.gleidson28.GNAvatarView;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -26,9 +25,11 @@ public class Avatar extends GNAvatarView {
 
         for (Node node : this.getChildrenUnmodifiable()) {
             if (node instanceof Circle circle) {
-                circle.setCursor(Cursor.HAND);
-                circle.hoverProperty().addListener((obs, oldVal, newVal) ->
-                        this.setStroke(newVal ? Color.gray(0.3) : Color.WHITE));
+                circle.hoverProperty().addListener((obs, oldVal, newVal) -> {
+                    if (!listeners.isEmpty()) {
+                        this.setStroke(newVal ? Color.gray(0.3) : Color.WHITE);
+                    }
+                });
                 circle.setOnMousePressed(mouseEvent -> {
                     for (AvatarListener listener : listeners) {
                         listener.onAction();

@@ -95,25 +95,24 @@
 
 .lobby .list-cell {
     -fx-padding: 0 10 0 5;
+    -fx-pref-height: 40;
+    -fx-background-color: white;
 }
 .lobby .list-cell .name {
     -fx-font-weight: bold;
+    -fx-background-color: transparent;
 }
 .lobby .list-cell .role {
     -fx-text-fill: gray;
     -fx-font-style: italic;
+    -fx-background-color: transparent;
+}
+.lobby .list-cell:selected {
+    -fx-background-color: -fx-focus-color;
 }
 .lobby .list-cell:selected .name,
 .lobby .list-cell:selected .role {
     -fx-text-fill: white;
-}
-.lobby .list-cell .indicator {
-    -fx-font-size: 20;
-    -fx-padding: 0;
-}
-.lobby .list-cell .indicator .text {
-    -fx-stroke: white;
-    -fx-stroke-width: 1;
 }
 
 .text-input,
