@@ -41,7 +41,7 @@ public class EllipticCurveDiffieHellmanAES {
             keyAgreement.init(kp.getPrivate());
         }
         catch (NoSuchAlgorithmException | InvalidKeyException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -53,7 +53,7 @@ public class EllipticCurveDiffieHellmanAES {
             secretKey = messageDigest.digest(sharedSecret);
         }
         catch (InvalidKeyException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

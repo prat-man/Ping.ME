@@ -17,7 +17,6 @@ public class FXApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         PrimaryStage.initialize(stage);
-        ChatState.initialize();
 
         stage.setTitle(Constants.APP_NAME);
 

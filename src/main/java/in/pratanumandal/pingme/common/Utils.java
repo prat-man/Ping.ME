@@ -29,7 +29,7 @@ public class Utils {
         try {
             doneLatch.await();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

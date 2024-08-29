@@ -3,6 +3,7 @@ package in.pratanumandal.pingme.controller;
 import in.pratanumandal.pingme.common.Constants;
 import in.pratanumandal.pingme.engine.server.Server;
 import in.pratanumandal.pingme.engine.server.ServerLog;
+import in.pratanumandal.pingme.state.ChatState;
 import in.pratanumandal.pingme.state.PrimaryStage;
 import in.pratanumandal.pingme.state.ServerLogs;
 import javafx.collections.transformation.SortedList;
@@ -33,17 +34,11 @@ public class ServerController {
 
     @FXML private LobbyController lobbyController;
 
-    public void connect(int port) {
+    public void connect(int port) throws IOException {
         ServerLogs.initialize();
 
-        Server server;
-        try {
-            server = new Server(port);
-            server.start();
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Server server = new Server(port);
+        server.start();
 
         lobbyController.setServer(server);
 

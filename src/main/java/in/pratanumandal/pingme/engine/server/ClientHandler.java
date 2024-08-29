@@ -62,7 +62,7 @@ public class ClientHandler extends Thread {
         try {
             this.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -84,14 +84,14 @@ public class ClientHandler extends Thread {
             // DO NOTHING
         }
         catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         finally {
             try {
                 clientSocket.close();
             }
             catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
     }
@@ -135,7 +135,7 @@ public class ClientHandler extends Thread {
         try {
             clientSocket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         server.removeClient(this);
@@ -157,7 +157,7 @@ public class ClientHandler extends Thread {
         try {
             clientSocket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         server.removeClient(this);
@@ -185,7 +185,7 @@ public class ClientHandler extends Thread {
             outputStream.writeObject(object);
         }
         catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

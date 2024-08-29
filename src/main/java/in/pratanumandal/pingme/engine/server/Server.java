@@ -75,7 +75,7 @@ public class Server extends Thread {
                 clientHandler.start();
             }
             catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
     }

@@ -25,15 +25,12 @@ public class ServerLogs {
     }
 
     public static void initialize() {
-        if (instance != null) {
-            throw new RuntimeException(ChatState.class.getSimpleName() + " is already initialized");
-        }
         instance = new ServerLogs();
     }
 
     public static ServerLogs getInstance() {
         if (instance == null) {
-            throw new RuntimeException(PrimaryStage.class.getSimpleName() + " is not initialized");
+            throw new RuntimeException(ServerLogs.class.getSimpleName() + " is not initialized");
         }
         return instance;
     }

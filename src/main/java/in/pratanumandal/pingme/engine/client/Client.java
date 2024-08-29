@@ -77,7 +77,7 @@ public class Client extends Thread {
                 clientSocket.close();
             }
             catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
     }
@@ -198,7 +198,7 @@ public class Client extends Thread {
             outputStream.writeObject(object);
         }
         catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
