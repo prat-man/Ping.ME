@@ -93,10 +93,13 @@
     -fx-font-size: 11;
 }
 
+.lobby {
+    -fx-background-color: white;
+}
 .lobby .list-cell {
     -fx-padding: 0 10 0 5;
     -fx-pref-height: 40;
-    -fx-background-color: white;
+    -fx-background-color: transparent;
 }
 .lobby .list-cell .name {
     -fx-font-weight: bold;
