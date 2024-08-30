@@ -1,6 +1,6 @@
 package in.pratanumandal.pingme.components;
 
-import in.pratanumandal.pingme.FXApplication;
+import in.pratanumandal.pingme.common.Utils;
 import io.github.gleidson28.AvatarType;
 import io.github.gleidson28.GNAvatarView;
 import javafx.scene.Node;
@@ -8,8 +8,6 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -44,14 +42,8 @@ public class Avatar extends GNAvatarView {
     }
 
     public void setImage(int index) {
-        try (InputStream inputStream = FXApplication.class.getResourceAsStream("/images/avatars/" + index + ".png")) {
-            assert inputStream != null;
-            Image image = new Image(inputStream);
-            super.setImage(image);
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Image image = Utils.loadImage("/images/avatars/" + index + ".png");
+        super.setImage(image);
     }
 
     public void randomImage() {

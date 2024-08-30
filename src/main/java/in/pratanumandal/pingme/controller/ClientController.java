@@ -2,7 +2,6 @@ package in.pratanumandal.pingme.controller;
 
 import in.pratanumandal.pingme.common.Constants;
 import in.pratanumandal.pingme.engine.client.Client;
-import in.pratanumandal.pingme.state.ChatState;
 import in.pratanumandal.pingme.state.PrimaryStage;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;

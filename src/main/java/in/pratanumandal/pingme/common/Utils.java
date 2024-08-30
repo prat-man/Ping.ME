@@ -1,7 +1,10 @@
 package in.pratanumandal.pingme.common;
 
+import in.pratanumandal.pingme.FXApplication;
 import javafx.application.Platform;
+import javafx.scene.image.Image;
 
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
 public class Utils {
@@ -31,6 +34,10 @@ public class Utils {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static Image loadImage(String path) {
+        return new Image(Objects.requireNonNull(FXApplication.class.getResourceAsStream(path)));
     }
 
 }
