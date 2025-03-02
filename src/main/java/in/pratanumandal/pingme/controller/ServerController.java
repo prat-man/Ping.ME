@@ -1,8 +1,8 @@
 package in.pratanumandal.pingme.controller;
 
 import in.pratanumandal.pingme.common.Constants;
-import in.pratanumandal.pingme.engine.server.Server;
 import in.pratanumandal.pingme.engine.entity.ServerLog;
+import in.pratanumandal.pingme.engine.server.Server;
 import in.pratanumandal.pingme.state.PrimaryStage;
 import in.pratanumandal.pingme.state.ServerLogs;
 import javafx.collections.transformation.SortedList;

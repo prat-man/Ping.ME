@@ -6,6 +6,13 @@
     -fx-font-smoothing-type: gray;
 }
 
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
 .ikonli-font-icon {
     -fx-icon-size: 14px;
     -fx-icon-color: #333333;
@@ -138,23 +145,28 @@
     -fx-alignment: center;
 }
 
-.attachment.thumbnail {
-    -fx-background-radius: 5;
-    -fx-background-color: lightgray;
+.tile-scroll {
+    -fx-border-width: 0;
 }
 
+.attachment.thumbnail {
+    -fx-background-radius: 5;
+}
 .attachment.close,
-.attachment.open {
+.attachment.view,
+.attachment.download {
     -fx-background-radius: 5;
 }
 .attachment.close {
-    -fx-background-color: #CD5C5CE0;
+    -fx-background-color: #CD5C5CA0;
 }
-.attachment.open {
-    -fx-background-color: #1D7CF2E0;
+.attachment.view,
+.attachment.download {
+    -fx-background-color: #1D7CF2A0;
 }
 .attachment.close .ikonli-font-icon,
-.attachment.open .ikonli-font-icon {
+.attachment.view .ikonli-font-icon,
+.attachment.download .ikonli-font-icon {
     -fx-icon-size: 20px;
     -fx-icon-color: white;
 }

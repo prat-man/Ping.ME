@@ -2,11 +2,11 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
-<HBox fx:id="container" spacing="4.0" styleClass="chat-message" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="in.pratanumandal.pingme.controller.MessageController">
+<HBox fx:id="container" spacing="4.0" styleClass="chat-message" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="in.pratanumandal.pingme.controller.MessageController">
    <children>
       <VBox fx:id="icon">
          <children>
@@ -16,11 +16,16 @@
       <VBox fx:id="wrapper" spacing="3.0" styleClass="card">
          <children>
             <Label fx:id="sender" styleClass="sender" />
-            <TextFlow styleClass="message">
+            <TextFlow fx:id="messageBox" styleClass="message" visible="false">
                <children>
                   <Text fx:id="message" strokeType="OUTSIDE" strokeWidth="0.0" />
                </children>
             </TextFlow>
+            <ScrollPane fx:id="attachmentScroll" hbarPolicy="NEVER" pannable="true" styleClass="tile-scroll" vbarPolicy="NEVER" visible="false">
+               <content>
+                  <HBox fx:id="attachmentTiles" spacing="7.0" />
+               </content>
+            </ScrollPane>
             <HBox alignment="TOP_RIGHT">
                <children>
                   <Label fx:id="timestamp" styleClass="timestamp" />

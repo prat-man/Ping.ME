@@ -9,7 +9,9 @@ import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.Objects;
 
@@ -35,10 +37,12 @@ public class Attachment implements Serializable {
                 attachment = new ChatFile(path);
 
                 // load file icon
-                Icon icon = FileSystemView.getFileSystemView().getSystemIcon(path.toFile());
+                Icon icon = FileSystemView.getFileSystemView().getSystemIcon(path.toFile(), 32, 32);
 
                 BufferedImage bufferedImage = new BufferedImage(Constants.THUMBNAIL_SIZE, Constants.THUMBNAIL_SIZE, BufferedImage.TYPE_INT_ARGB);
                 Graphics2D g = bufferedImage.createGraphics();
+                g.setColor(Color.WHITE);
+                g.fillRect(0, 0, Constants.THUMBNAIL_SIZE, Constants.THUMBNAIL_SIZE);
                 icon.paintIcon(null, g, (Constants.THUMBNAIL_SIZE - icon.getIconWidth()) / 2, (Constants.THUMBNAIL_SIZE - icon.getIconHeight()) / 2);
                 g.dispose();
 
@@ -83,6 +87,16 @@ public class Attachment implements Serializable {
         return thumbnail.getImage();
     }
 
+    public byte[] getBytes() {
+        if (isImage()) {
+            return ((ChatImage) attachment).getBytes();
+        }
+        else if (isFile()) {
+            return ((ChatFile) attachment).getBytes();
+        }
+        return null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -92,8 +106,8 @@ public class Attachment implements Serializable {
     }
 
     public enum AttachmentType {
-        FILE,
-        IMAGE
+        IMAGE,
+        FILE
     }
 
 }

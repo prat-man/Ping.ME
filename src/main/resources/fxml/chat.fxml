@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import org.kordamp.ikonli.javafx.*?>
-
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <SplitPane fx:id="splitPane" dividerPositions="0.7" orientation="VERTICAL" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="in.pratanumandal.pingme.controller.ChatController">
     <items>
         <VBox fx:id="container">
@@ -14,7 +13,7 @@
         </VBox>
         <VBox alignment="TOP_RIGHT" spacing="7.0" SplitPane.resizableWithParent="false">
             <children>
-            <ScrollPane fx:id="attachmentScroll" hbarPolicy="NEVER" pannable="true" style="-fx-border-width: 0; -fx-background-color: transparent;" vbarPolicy="NEVER" visible="false">
+            <ScrollPane fx:id="attachmentScroll" hbarPolicy="NEVER" pannable="true" styleClass="tile-scroll" vbarPolicy="NEVER" visible="false">
                <content>
                   <HBox fx:id="attachmentTiles" spacing="7.0" />
                </content>

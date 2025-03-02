@@ -1,14 +1,7 @@
 package in.pratanumandal.pingme.engine.client;
 
 import in.pratanumandal.pingme.engine.entity.Message;
-import in.pratanumandal.pingme.engine.packet.ConnectPacket;
-import in.pratanumandal.pingme.engine.packet.DisconnectPacket;
-import in.pratanumandal.pingme.engine.packet.JoinPacket;
-import in.pratanumandal.pingme.engine.packet.MessagePacket;
-import in.pratanumandal.pingme.engine.packet.Packet;
-import in.pratanumandal.pingme.engine.packet.PacketType;
-import in.pratanumandal.pingme.engine.packet.RemovePacket;
-import in.pratanumandal.pingme.engine.packet.WelcomePacket;
+import in.pratanumandal.pingme.engine.packet.*;
 import in.pratanumandal.pingme.security.EllipticCurveDiffieHellmanAES;
 import in.pratanumandal.pingme.security.SecureObject;
 import in.pratanumandal.pingme.state.ChatState;
@@ -117,7 +110,7 @@ public class Client extends Thread {
 
         Platform.runLater(() -> {
             ChatState.getInstance().getLobbyList().add(connectedPacket.getUser());
-            Message message = new Message(null, connectedPacket.getUser().getName() + " joined the chat", null);
+            Message message = new Message(null, connectedPacket.getUser().getName() + " joined the chat");
             ChatState.getInstance().getMessageList().add(message);
         });
     }
@@ -129,14 +122,14 @@ public class Client extends Thread {
             running.set(false);
 
             Platform.runLater(() -> {
-                Message message = new Message(null, "Server has shutdown", null);
+                Message message = new Message(null, "Server has shutdown");
                 ChatState.getInstance().getMessageList().add(message);
             });
         }
         else {
             Platform.runLater(() -> {
                 ChatState.getInstance().getLobbyList().remove(disconnectPacket.getUser());
-                Message message = new Message(null, disconnectPacket.getUser().getName() + " left the chat", null);
+                Message message = new Message(null, disconnectPacket.getUser().getName() + " left the chat");
                 ChatState.getInstance().getMessageList().add(message);
             });
         }
@@ -149,14 +142,14 @@ public class Client extends Thread {
             running.set(false);
 
             Platform.runLater(() -> {
-                Message message = new Message(null, "You have been removed", null);
+                Message message = new Message(null, "You have been removed");
                 ChatState.getInstance().getMessageList().add(message);
             });
         }
         else {
             Platform.runLater(() -> {
                 ChatState.getInstance().getLobbyList().remove(removedPacket.getUser());
-                Message message = new Message(null, removedPacket.getUser().getName() + " has been removed", null);
+                Message message = new Message(null, removedPacket.getUser().getName() + " has been removed");
                 ChatState.getInstance().getMessageList().add(message);
             });
         }

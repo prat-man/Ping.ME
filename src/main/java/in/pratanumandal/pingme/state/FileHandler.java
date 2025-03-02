@@ -1,8 +1,6 @@
 package in.pratanumandal.pingme.state;
 
-import in.pratanumandal.pingme.common.Utils;
 import javafx.application.HostServices;
-import javafx.stage.Stage;
 
 import java.io.File;
 import java.nio.file.Path;

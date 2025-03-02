@@ -1,8 +1,8 @@
 package in.pratanumandal.pingme.state;
 
+import in.pratanumandal.pingme.engine.entity.ServerLog;
 import in.pratanumandal.pingme.engine.entity.User;
 import in.pratanumandal.pingme.engine.packet.Packet;
-import in.pratanumandal.pingme.engine.entity.ServerLog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

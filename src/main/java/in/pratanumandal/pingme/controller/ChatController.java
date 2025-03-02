@@ -5,9 +5,7 @@ import in.pratanumandal.pingme.engine.client.Client;
 import in.pratanumandal.pingme.engine.entity.Attachment;
 import in.pratanumandal.pingme.engine.entity.Message;
 import in.pratanumandal.pingme.state.ChatState;
-import in.pratanumandal.pingme.state.FileHandler;
 import in.pratanumandal.pingme.state.PrimaryStage;
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -16,14 +14,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.fxmisc.flowless.Cell;
 import org.fxmisc.flowless.VirtualFlow;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,15 +48,13 @@ public class ChatController {
     private ObservableList<HBox> messages;
     private VirtualFlow<HBox, ?> chatPane;
 
-    private List<Attachment> attachmentList;
     private ObservableList<Attachment> attachments;
 
     private Client client;
 
     @FXML
     protected void initialize() {
-        attachmentList = new ArrayList<>();
-        attachments = FXCollections.observableList(attachmentList);
+        attachments = FXCollections.observableArrayList();
 
         message.textProperty().addListener((obs, oldVal, newVal) -> updateSendButton());
         attachments.addListener((ListChangeListener<Attachment>) change -> updateSendButton());
@@ -71,12 +69,13 @@ public class ChatController {
 
                     AttachmentController controller = loader.getController();
                     controller.setAttachment(attachment);
-                    controller.setMode(AttachmentController.AttachmentMode.VIEW);
+                    controller.setMode(AttachmentController.AttachmentMode.CREATE);
                     controller.addListener(() -> {
-                        this.attachments.remove(attachment);
-                        this.attachmentTiles.getChildren().remove(root);
+                        attachments.remove(attachment);
+                        attachmentTiles.getChildren().remove(root);
                     });
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             });
@@ -138,12 +137,7 @@ public class ChatController {
             if (last.get() != null) last.get().getStyleClass().add("last");
         });
 
-        attachmentScroll.setOnScroll(event -> {
-            double deltaX = event.getDeltaY();
-            attachmentScroll.setHvalue(attachmentScroll.getHvalue() - deltaX / attachmentScroll.getWidth());
-        });
         attachmentScroll.minViewportHeightProperty().bind(attachmentTiles.heightProperty());
-
         attachmentScroll.managedProperty().bind(attachmentScroll.visibleProperty());
         attachments.addListener((ListChangeListener<Attachment>) change -> attachmentScroll.setVisible(!attachments.isEmpty()));
     }
@@ -160,8 +154,7 @@ public class ChatController {
                     if (!attachments.contains(attachment)) {
                         attachments.add(attachment);
                     }
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     throw new RuntimeException(e);
                     // TODO: Handle exception
                 }
@@ -171,11 +164,13 @@ public class ChatController {
 
     @FXML
     private void sendMessage() {
-        Message message = new Message(ChatState.getInstance().getCurrentUser(), this.message.getText(), this.attachmentList);
+        Message message = new Message(ChatState.getInstance().getCurrentUser(), this.message.getText(), new ArrayList<>(attachments));
         addChatMessage(message);
-        this.attachments.clear();
+
         this.message.clear();
         this.message.requestFocus();
+        this.attachments.clear();
+        this.attachmentTiles.getChildren().clear();
 
         client.sendMessage(message);
     }
@@ -203,7 +198,7 @@ public class ChatController {
     }
 
     private void updateSendButton() {
-        send.setDisable(message.getText().isEmpty() && attachments.isEmpty());
+        send.setDisable(message.getText().isBlank() && attachments.isEmpty());
     }
 
 }

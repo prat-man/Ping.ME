@@ -3,15 +3,9 @@ package in.pratanumandal.pingme.engine.server;
 import in.pratanumandal.pingme.common.Utils;
 import in.pratanumandal.pingme.engine.entity.ServerLog;
 import in.pratanumandal.pingme.engine.entity.User;
-import in.pratanumandal.pingme.engine.packet.ConnectPacket;
-import in.pratanumandal.pingme.engine.packet.DisconnectPacket;
-import in.pratanumandal.pingme.engine.packet.JoinPacket;
-import in.pratanumandal.pingme.engine.packet.MessagePacket;
-import in.pratanumandal.pingme.engine.packet.Packet;
-import in.pratanumandal.pingme.engine.packet.PacketType;
-import in.pratanumandal.pingme.engine.packet.RemovePacket;
-import in.pratanumandal.pingme.engine.packet.WelcomePacket;
+import in.pratanumandal.pingme.engine.packet.*;
 import in.pratanumandal.pingme.security.EllipticCurveDiffieHellmanAES;
+import in.pratanumandal.pingme.security.FileDefender;
 import in.pratanumandal.pingme.security.SecureObject;
 import in.pratanumandal.pingme.state.ChatState;
 import in.pratanumandal.pingme.state.ServerLogs;
@@ -172,6 +166,7 @@ public class ClientHandler extends Thread {
 
     private void handleMessage(Packet packet) {
         MessagePacket messagePacket = (MessagePacket) packet;
+        messagePacket.getMessage().getAttachments().removeIf(attachment -> FileDefender.isMalicious(attachment.getBytes()));
         broadcastPacket(messagePacket);
     }
 

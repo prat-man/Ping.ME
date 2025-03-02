@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Message implements Serializable {
@@ -22,6 +23,10 @@ public class Message implements Serializable {
         this.message = message;
         this.attachments = attachments;
         this.timestamp = LocalDateTime.now();
+    }
+
+    public Message(User user, String message) {
+        this(user, message, new ArrayList<>());
     }
 
     public User getUser() {
