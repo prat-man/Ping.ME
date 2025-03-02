@@ -117,7 +117,7 @@ public class Client extends Thread {
 
         Platform.runLater(() -> {
             ChatState.getInstance().getLobbyList().add(connectedPacket.getUser());
-            Message message = new Message(null, connectedPacket.getUser().getName() + " joined the chat");
+            Message message = new Message(null, connectedPacket.getUser().getName() + " joined the chat", null);
             ChatState.getInstance().getMessageList().add(message);
         });
     }
@@ -129,14 +129,14 @@ public class Client extends Thread {
             running.set(false);
 
             Platform.runLater(() -> {
-                Message message = new Message(null, "Server has shutdown");
+                Message message = new Message(null, "Server has shutdown", null);
                 ChatState.getInstance().getMessageList().add(message);
             });
         }
         else {
             Platform.runLater(() -> {
                 ChatState.getInstance().getLobbyList().remove(disconnectPacket.getUser());
-                Message message = new Message(null, disconnectPacket.getUser().getName() + " left the chat");
+                Message message = new Message(null, disconnectPacket.getUser().getName() + " left the chat", null);
                 ChatState.getInstance().getMessageList().add(message);
             });
         }
@@ -149,14 +149,14 @@ public class Client extends Thread {
             running.set(false);
 
             Platform.runLater(() -> {
-                Message message = new Message(null, "You have been removed");
+                Message message = new Message(null, "You have been removed", null);
                 ChatState.getInstance().getMessageList().add(message);
             });
         }
         else {
             Platform.runLater(() -> {
                 ChatState.getInstance().getLobbyList().remove(removedPacket.getUser());
-                Message message = new Message(null, removedPacket.getUser().getName() + " has been removed");
+                Message message = new Message(null, removedPacket.getUser().getName() + " has been removed", null);
                 ChatState.getInstance().getMessageList().add(message);
             });
         }

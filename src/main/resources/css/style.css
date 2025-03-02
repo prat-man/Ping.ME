@@ -137,3 +137,24 @@
 .table-column.center {
     -fx-alignment: center;
 }
+
+.attachment.thumbnail {
+    -fx-background-radius: 5;
+    -fx-background-color: lightgray;
+}
+
+.attachment.close,
+.attachment.open {
+    -fx-background-radius: 5;
+}
+.attachment.close {
+    -fx-background-color: #CD5C5CE0;
+}
+.attachment.open {
+    -fx-background-color: #1D7CF2E0;
+}
+.attachment.close .ikonli-font-icon,
+.attachment.open .ikonli-font-icon {
+    -fx-icon-size: 20px;
+    -fx-icon-color: white;
+}

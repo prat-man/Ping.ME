@@ -1,7 +1,6 @@
-package in.pratanumandal.pingme.engine.server;
+package in.pratanumandal.pingme.engine.entity;
 
 import in.pratanumandal.pingme.common.Constants;
-import in.pratanumandal.pingme.engine.entity.User;
 import in.pratanumandal.pingme.engine.packet.Packet;
 
 import java.time.LocalDateTime;

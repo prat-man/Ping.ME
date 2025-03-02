@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+
+<StackPane fx:id="pane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="in.pratanumandal.pingme.controller.AttachmentController">
+   <children>
+      <Pane>
+         <children>
+            <ImageView fx:id="fileIcon" fitHeight="${thumbnailSize}" fitWidth="${thumbnailSize}" pickOnBounds="true" preserveRatio="true" />
+         </children>
+         <styleClass>
+            <String fx:value="attachment" />
+            <String fx:value="thumbnail" />
+         </styleClass>
+      </Pane>
+      <StackPane fx:id="close" onMouseClicked="#remove" prefHeight="${thumbnailSize}" prefWidth="${thumbnailSize}" visible="false">
+         <children>
+            <FontIcon iconLiteral="fas-times" />
+         </children>
+         <styleClass>
+            <String fx:value="attachment" />
+            <String fx:value="close" />
+         </styleClass>
+      </StackPane>
+      <StackPane fx:id="open" layoutX="10.0" layoutY="10.0" onMouseClicked="#remove" prefHeight="${thumbnailSize}" prefWidth="${thumbnailSize}" visible="false">
+         <children>
+            <FontIcon iconLiteral="far-eye" />
+         </children>
+         <styleClass>
+            <String fx:value="attachment" />
+            <String fx:value="open" />
+         </styleClass>
+      </StackPane>
+   </children>
+</StackPane>

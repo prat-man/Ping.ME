@@ -2,31 +2,36 @@ package in.pratanumandal.pingme.controller;
 
 import in.pratanumandal.pingme.common.Constants;
 import in.pratanumandal.pingme.engine.client.Client;
+import in.pratanumandal.pingme.engine.entity.Attachment;
 import in.pratanumandal.pingme.engine.entity.Message;
 import in.pratanumandal.pingme.state.ChatState;
+import in.pratanumandal.pingme.state.FileHandler;
+import in.pratanumandal.pingme.state.PrimaryStage;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 import org.fxmisc.flowless.Cell;
 import org.fxmisc.flowless.VirtualFlow;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ChatController {
+
+    @FXML private final int thumbnailSize = Constants.THUMBNAIL_SIZE;
 
     @FXML private TextArea message;
 
@@ -36,14 +41,46 @@ public class ChatController {
 
     @FXML private VBox container;
 
+    @FXML private ScrollPane attachmentScroll;
+
+    @FXML private HBox attachmentTiles;
+
     private ObservableList<HBox> messages;
     private VirtualFlow<HBox, ?> chatPane;
+
+    private List<Attachment> attachmentList;
+    private ObservableList<Attachment> attachments;
 
     private Client client;
 
     @FXML
     protected void initialize() {
-        message.textProperty().addListener((obs, oldVal, newVal) -> send.setDisable(newVal.isEmpty()));
+        attachmentList = new ArrayList<>();
+        attachments = FXCollections.observableList(attachmentList);
+
+        message.textProperty().addListener((obs, oldVal, newVal) -> updateSendButton());
+        attachments.addListener((ListChangeListener<Attachment>) change -> updateSendButton());
+
+        attachments.addListener((ListChangeListener<Attachment>) change -> {
+            change.next();
+            change.getAddedSubList().forEach(attachment -> {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/attachment.fxml"));
+                    StackPane root = loader.load();
+                    attachmentTiles.getChildren().add(root);
+
+                    AttachmentController controller = loader.getController();
+                    controller.setAttachment(attachment);
+                    controller.setMode(AttachmentController.AttachmentMode.VIEW);
+                    controller.addListener(() -> {
+                        this.attachments.remove(attachment);
+                        this.attachmentTiles.getChildren().remove(root);
+                    });
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        });
 
         message.addEventFilter(KeyEvent.ANY, event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -100,12 +137,43 @@ public class ChatController {
             last.set(messages.getLast());
             if (last.get() != null) last.get().getStyleClass().add("last");
         });
+
+        attachmentScroll.setOnScroll(event -> {
+            double deltaX = event.getDeltaY();
+            attachmentScroll.setHvalue(attachmentScroll.getHvalue() - deltaX / attachmentScroll.getWidth());
+        });
+        attachmentScroll.minViewportHeightProperty().bind(attachmentTiles.heightProperty());
+
+        attachmentScroll.managedProperty().bind(attachmentScroll.visibleProperty());
+        attachments.addListener((ListChangeListener<Attachment>) change -> attachmentScroll.setVisible(!attachments.isEmpty()));
+    }
+
+    @FXML
+    private void addAttachment() {
+        FileChooser fileChooser = new FileChooser();
+        List<File> files = fileChooser.showOpenMultipleDialog(PrimaryStage.getInstance().getStage());
+
+        if (files != null) {
+            files.forEach(file -> {
+                try {
+                    Attachment attachment = new Attachment(file.toPath());
+                    if (!attachments.contains(attachment)) {
+                        attachments.add(attachment);
+                    }
+                }
+                catch (IOException e) {
+                    throw new RuntimeException(e);
+                    // TODO: Handle exception
+                }
+            });
+        }
     }
 
     @FXML
     private void sendMessage() {
-        Message message = new Message(ChatState.getInstance().getCurrentUser(), this.message.getText());
+        Message message = new Message(ChatState.getInstance().getCurrentUser(), this.message.getText(), this.attachmentList);
         addChatMessage(message);
+        this.attachments.clear();
         this.message.clear();
         this.message.requestFocus();
 
@@ -132,6 +200,10 @@ public class ChatController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void updateSendButton() {
+        send.setDisable(message.getText().isEmpty() && attachments.isEmpty());
     }
 
 }

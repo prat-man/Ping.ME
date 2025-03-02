@@ -39,15 +39,13 @@ public class MainController implements ModeController.ModeListener {
             ServerController controller = loader.getController();
             controller.connect(port);
         }
-        catch (IOException e) {
+        catch (Exception e) {
             AppAlert appAlert = new AppAlert(Alert.AlertType.ERROR,
                     "Server",
                     "Failed to create server");
             appAlert.show();
 
             container.setCenter(modeRoot);
-
-            // TODO: Log error message
         }
     }
 
@@ -63,15 +61,15 @@ public class MainController implements ModeController.ModeListener {
             ClientController controller = loader.getController();
             controller.connect(name, avatar, address, port);
         }
-        catch (IOException e) {
+        catch (Exception e) {
+            e.printStackTrace();
+
             AppAlert appAlert = new AppAlert(Alert.AlertType.ERROR,
                     "Client",
                     "Failed to join server");
             appAlert.show();
 
             container.setCenter(modeRoot);
-
-            // TODO: Log error message
         }
     }
 

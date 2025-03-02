@@ -6,6 +6,8 @@ module in.pratanumandal.pingme {
     requires org.controlsfx.controls;
     requires org.kordamp.ikonli.javafx;
     requires GNAvatarView;
+    requires javafx.swing;
+    requires net.coobird.thumbnailator;
 
     opens in.pratanumandal.pingme to javafx.fxml;
     opens in.pratanumandal.pingme.controller to javafx.fxml;

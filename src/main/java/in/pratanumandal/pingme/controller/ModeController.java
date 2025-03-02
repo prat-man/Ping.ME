@@ -1,14 +1,18 @@
 package in.pratanumandal.pingme.controller;
 
 import in.pratanumandal.pingme.common.Constants;
+import in.pratanumandal.pingme.components.AppAlert;
 import in.pratanumandal.pingme.components.Avatar;
+import in.pratanumandal.pingme.components.IntegerTextFormatter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
@@ -21,6 +25,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class ModeController {
 
@@ -91,6 +96,9 @@ public class ModeController {
             }
             catch (IOException ignored) { }
         });
+
+        serverPort.setTextFormatter(new IntegerTextFormatter());
+        clientPort.setTextFormatter(new IntegerTextFormatter());
     }
 
     public void addListener(ModeListener listener) {
@@ -100,36 +108,56 @@ public class ModeController {
 
     @FXML
     private void server() {
-        for (ModeListener listener : listeners) {
-            int port = 80;
-            if (!serverPort.getText().isBlank()) {
+        int port = 80;
+        if (!serverPort.getText().isBlank()) {
+            try {
                 port = Integer.parseInt(serverPort.getText());
             }
+            catch (NumberFormatException e) {
+                AppAlert appAlert = new AppAlert(Alert.AlertType.ERROR,
+                        "Server",
+                        "Invalid port");
+                appAlert.show();
 
+                return;
+            }
+        }
+
+        for (ModeListener listener : listeners) {
             listener.server(port);
         }
     }
 
     @FXML
     private void client() throws UnknownHostException {
-        for (ModeListener listener : listeners) {
-            if (clientName.getText().isBlank()) {
-                throw new RuntimeException();
-            }
-            String name = clientName.getText();
+        if (clientName.getText().isBlank()) {
+            throw new RuntimeException();
+        }
+        String name = clientName.getText();
 
-            Image image = avatar.getImage();
+        Image image = avatar.getImage();
 
-            InetAddress address = InetAddress.getLocalHost();
-            if (!clientAddress.getText().isBlank()) {
-                address = InetAddress.getByName(clientAddress.getText());
-            }
+        InetAddress address = InetAddress.getLocalHost();
+        if (!clientAddress.getText().isBlank()) {
+            address = InetAddress.getByName(clientAddress.getText());
+        }
 
-            int port = 80;
-            if (!clientPort.getText().isBlank()) {
+        int port = 80;
+        if (!clientPort.getText().isBlank()) {
+            try {
                 port = Integer.parseInt(clientPort.getText());
             }
+            catch (NumberFormatException e) {
+                AppAlert appAlert = new AppAlert(Alert.AlertType.ERROR,
+                        "Client",
+                        "Invalid port");
+                appAlert.show();
 
+                return;
+            }
+        }
+
+        for (ModeListener listener : listeners) {
             listener.client(name, image, address, port);
         }
     }
