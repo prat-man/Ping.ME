@@ -1,5 +1,7 @@
 package in.pratanumandal.pingme.engine.entity;
 
+import in.pratanumandal.pingme.engine.entity.attachment.Attachment;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,7 +13,6 @@ public class Message implements Serializable {
 
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy | hh:mm a");
     private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
-
 
     private final AuthenticatedUser user;
     private final String message;

@@ -21,6 +21,7 @@ module in.pratanumandal.pingme {
     exports in.pratanumandal.pingme.controller;
     exports in.pratanumandal.pingme.engine.client;
     exports in.pratanumandal.pingme.engine.entity;
+    exports in.pratanumandal.pingme.engine.entity.attachment;
     exports in.pratanumandal.pingme.engine.packet;
     exports in.pratanumandal.pingme.engine.server;
     exports in.pratanumandal.pingme.security;

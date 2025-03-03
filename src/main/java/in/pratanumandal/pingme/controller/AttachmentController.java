@@ -1,7 +1,7 @@
 package in.pratanumandal.pingme.controller;
 
 import in.pratanumandal.pingme.common.Constants;
-import in.pratanumandal.pingme.engine.entity.Attachment;
+import in.pratanumandal.pingme.engine.entity.attachment.Attachment;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tooltip;
 import javafx.scene.effect.GaussianBlur;
@@ -40,8 +40,8 @@ public class AttachmentController {
         listeners = new ArrayList<>();
         pane.hoverProperty().addListener((obs, oldVal, newVal) -> {
             close.setVisible(mode == AttachmentMode.CREATE && newVal);
-            view.setVisible(mode == AttachmentMode.VIEW && attachment.isImage() && newVal);
-            download.setVisible(mode == AttachmentMode.VIEW && attachment.isFile() && newVal);
+            view.setVisible(mode == AttachmentMode.VIEW && attachment.getType() == Attachment.AttachmentType.IMAGE && newVal);
+            download.setVisible(mode == AttachmentMode.VIEW && attachment.getType() == Attachment.AttachmentType.FILE && newVal);
 
             fileIcon.setEffect(newVal ? blur : null);
         });

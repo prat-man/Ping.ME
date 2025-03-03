@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class LobbyController {
 
-
     @FXML private ListView<User> lobby;
 
     @FXML private Label connectedUsers;

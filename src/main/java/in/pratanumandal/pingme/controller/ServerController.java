@@ -23,7 +23,6 @@ public class ServerController {
     @FXML private TextField localAddress;
     @FXML private TextField serverPort;
 
-
     @FXML private TableView<ServerLog> logsTable;
     @FXML private TableColumn<ServerLog, ServerLog.Channel> channelColumn;
     @FXML private TableColumn<ServerLog, String> timestampColumn;

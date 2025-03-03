@@ -2,8 +2,10 @@ package in.pratanumandal.pingme.controller;
 
 import in.pratanumandal.pingme.common.Constants;
 import in.pratanumandal.pingme.engine.client.Client;
-import in.pratanumandal.pingme.engine.entity.Attachment;
 import in.pratanumandal.pingme.engine.entity.Message;
+import in.pratanumandal.pingme.engine.entity.attachment.Attachment;
+import in.pratanumandal.pingme.engine.entity.attachment.FileAttachment;
+import in.pratanumandal.pingme.engine.entity.attachment.ImageAttachment;
 import in.pratanumandal.pingme.state.ChatState;
 import in.pratanumandal.pingme.state.PrimaryStage;
 import javafx.collections.FXCollections;
@@ -150,7 +152,13 @@ public class ChatController {
         if (files != null) {
             files.forEach(file -> {
                 try {
-                    Attachment attachment = new Attachment(file.toPath());
+                    Attachment attachment;
+                    try {
+                        attachment = new ImageAttachment(file.toPath());
+                    }
+                    catch (Exception e) {
+                        attachment = new FileAttachment(file.toPath());
+                    }
                     if (!attachments.contains(attachment)) {
                         attachments.add(attachment);
                     }
