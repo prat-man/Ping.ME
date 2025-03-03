@@ -4,19 +4,23 @@ import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
 public abstract class Attachment implements Serializable {
 
     protected final transient Path path;
+
     protected final String fileName;
     protected final AttachmentType attachmentType;
+    protected final byte[] payload;
 
-    public Attachment(Path path, AttachmentType attachmentType) {
+    public Attachment(Path path, AttachmentType attachmentType) throws IOException {
         this.path = path;
         this.fileName = path.getFileName().toString();
         this.attachmentType = attachmentType;
+        this.payload = Files.readAllBytes(path);
     }
 
     public String getFileName() {
@@ -31,7 +35,9 @@ public abstract class Attachment implements Serializable {
 
     public abstract Image getThumbnail();
 
-    public abstract void write(Path path) throws IOException;
+    public void write(Path path) throws IOException {
+        Files.write(path, payload);
+    }
 
     @Override
     public boolean equals(Object o) {

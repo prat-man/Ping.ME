@@ -10,19 +10,14 @@ import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class FileAttachment extends Attachment {
 
-    private final byte[] payload;
     private final ChatImage thumbnail;
 
     public FileAttachment(Path path) throws IOException {
         super(path, AttachmentType.FILE);
-
-        // load file
-        this.payload = Files.readAllBytes(path);
 
         // load thumbnail
         Icon icon = FileSystemView.getFileSystemView().getSystemIcon(path.toFile(), 32, 32);
@@ -45,11 +40,6 @@ public class FileAttachment extends Attachment {
     @Override
     public Image getThumbnail() {
         return thumbnail.getImage();
-    }
-
-    @Override
-    public void write(Path path) throws IOException {
-        Files.write(path, payload);
     }
 
 }
