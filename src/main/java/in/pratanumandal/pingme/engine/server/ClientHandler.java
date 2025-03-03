@@ -4,6 +4,7 @@ import in.pratanumandal.pingme.common.Utils;
 import in.pratanumandal.pingme.engine.entity.ServerLog;
 import in.pratanumandal.pingme.engine.entity.User;
 import in.pratanumandal.pingme.engine.packet.*;
+import in.pratanumandal.pingme.security.CompressedObject;
 import in.pratanumandal.pingme.security.EllipticCurveDiffieHellmanAES;
 import in.pratanumandal.pingme.security.FileDefender;
 import in.pratanumandal.pingme.security.SecureObject;
@@ -71,6 +72,7 @@ public class ClientHandler extends Thread {
                 if (ecdhaes.isReady()) {
                     object = ecdhaes.decrypt((SecureObject) object);
                 }
+                object = ((CompressedObject) object).getObject();
                 Packet packet = (Packet) object;
                 handlePacket(packet);
             }
@@ -175,6 +177,7 @@ public class ClientHandler extends Thread {
 
         try {
             Object object = packet;
+            object = new CompressedObject(object);
             if (ecdhaes.isReady()) {
                 object = ecdhaes.encrypt(object);
             }
