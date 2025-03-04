@@ -7,11 +7,10 @@ import in.pratanumandal.pingme.state.PrimaryStage;
 import in.pratanumandal.pingme.state.ServerLogs;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
@@ -19,8 +18,7 @@ import java.util.Comparator;
 
 public class ServerController {
 
-    @FXML private TextField publicAddress;
-    @FXML private TextField localAddress;
+    @FXML private ComboBox<String> ipAddress;
     @FXML private TextField serverPort;
 
     @FXML private TableView<ServerLog> logsTable;
@@ -43,8 +41,8 @@ public class ServerController {
         PrimaryStage.getInstance().getStage().setOnCloseRequest(event -> server.disconnect());
         PrimaryStage.getInstance().getStage().setTitle(Constants.APP_NAME + " (Server)");
 
-        publicAddress.setText(server.getPublicIPAddress());
-        localAddress.setText(server.getLocalIPAddress());
+        ipAddress.getItems().addAll(server.getIPAddresses());
+        ipAddress.getSelectionModel().selectFirst();
         serverPort.setText(server.getPort());
 
         SortedList<ServerLog> sortedList = new SortedList<>(ServerLogs.getInstance().getLogs(), Comparator.naturalOrder());
@@ -72,6 +70,22 @@ public class ServerController {
                 }
             }
         });
+    }
+
+    @FXML
+    private void copyIPAddress() {
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        ClipboardContent content = new ClipboardContent();
+        content.putString(ipAddress.getSelectionModel().getSelectedItem());
+        clipboard.setContent(content);
+    }
+
+    @FXML
+    private void copyServerPort() {
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        ClipboardContent content = new ClipboardContent();
+        content.putString(serverPort.getText());
+        clipboard.setContent(content);
     }
 
 }

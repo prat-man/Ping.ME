@@ -5,11 +5,11 @@ import in.pratanumandal.pingme.engine.packet.DisconnectPacket;
 import in.pratanumandal.pingme.engine.packet.Packet;
 import javafx.beans.property.SimpleBooleanProperty;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 
 public class Server extends Thread {
@@ -26,23 +26,42 @@ public class Server extends Thread {
         this.setDaemon(true);
     }
 
-    public String getLocalIPAddress() {
-        try {
-            return InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public List<String> getIPAddresses() {
+        List<String> addresses = new ArrayList<>();
 
-    public String getPublicIPAddress() {
         try {
-            URL url = URI.create("https://checkip.amazonaws.com/").toURL();
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()))) {
-                return br.readLine();
+            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+
+            while (networkInterfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = networkInterfaces.nextElement();
+
+                // Ignore interfaces that are down, loopback, or virtual
+                if (!networkInterface.isUp() || networkInterface.isLoopback() || networkInterface.isVirtual()) {
+                    continue;
+                }
+
+                Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
+
+                while (inetAddresses.hasMoreElements()) {
+                    InetAddress inetAddress = inetAddresses.nextElement();
+
+                    // Skip IPv6, link-local, and loopback addresses
+                    if (!(inetAddress instanceof Inet4Address) || inetAddress.isLoopbackAddress() || inetAddress.isLinkLocalAddress()) {
+                        continue;
+                    }
+
+                    addresses.add(inetAddress.getHostAddress());
+                }
             }
-        } catch (IOException e) {
+        }
+        catch (SocketException e) {
             throw new RuntimeException(e);
         }
+
+        // Sort the addresses
+        Collections.sort(addresses);
+
+        return addresses;
     }
 
     public String getPort() {
