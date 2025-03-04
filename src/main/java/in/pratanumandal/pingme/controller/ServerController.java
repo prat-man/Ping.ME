@@ -18,7 +18,8 @@ import java.util.Comparator;
 
 public class ServerController {
 
-    @FXML private ComboBox<String> ipAddress;
+    @FXML private TextField publicIPAddress;
+    @FXML private ComboBox<String> localIPAddress;
     @FXML private TextField serverPort;
 
     @FXML private TableView<ServerLog> logsTable;
@@ -41,8 +42,9 @@ public class ServerController {
         PrimaryStage.getInstance().getStage().setOnCloseRequest(event -> server.disconnect());
         PrimaryStage.getInstance().getStage().setTitle(Constants.APP_NAME + " (Server)");
 
-        ipAddress.getItems().addAll(server.getIPAddresses());
-        ipAddress.getSelectionModel().selectFirst();
+        publicIPAddress.setText(server.getPublicIPAddress());
+        localIPAddress.getItems().addAll(server.getLocalIPAddresses());
+        localIPAddress.getSelectionModel().selectFirst();
         serverPort.setText(server.getPort());
 
         SortedList<ServerLog> sortedList = new SortedList<>(ServerLogs.getInstance().getLogs(), Comparator.naturalOrder());
@@ -73,10 +75,18 @@ public class ServerController {
     }
 
     @FXML
-    private void copyIPAddress() {
+    private void copyPublicIPAddress() {
         Clipboard clipboard = Clipboard.getSystemClipboard();
         ClipboardContent content = new ClipboardContent();
-        content.putString(ipAddress.getSelectionModel().getSelectedItem());
+        content.putString(publicIPAddress.getText());
+        clipboard.setContent(content);
+    }
+
+    @FXML
+    private void copyLocalIPAddress() {
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        ClipboardContent content = new ClipboardContent();
+        content.putString(localIPAddress.getSelectionModel().getSelectedItem());
         clipboard.setContent(content);
     }
 

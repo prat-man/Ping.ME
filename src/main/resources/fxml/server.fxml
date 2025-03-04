@@ -19,18 +19,26 @@
                             <rowConstraints>
                                 <RowConstraints vgrow="SOMETIMES" />
                                 <RowConstraints vgrow="SOMETIMES" />
+                                <RowConstraints vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Label text="IP Address" />
-                                <ComboBox fx:id="ipAddress" prefWidth="200.0" GridPane.columnIndex="1" />
-                                <Button maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#copyIPAddress" GridPane.columnIndex="2">
+                        <Label layoutX="20.0" layoutY="24.0" text="Public IP Address" />
+                                <Label text="Local IP Address" GridPane.rowIndex="1" />
+                                <Label text="Port" GridPane.rowIndex="2" />
+                        <TextField fx:id="publicIPAddress" editable="false" layoutX="118.0" layoutY="44.0" GridPane.columnIndex="1" />
+                                <ComboBox fx:id="localIPAddress" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <TextField fx:id="serverPort" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Button layoutX="325.0" layoutY="52.0" mnemonicParsing="false" onAction="#copyPublicIPAddress" GridPane.columnIndex="2">
+                           <graphic>
+                              <FontIcon iconLiteral="far-copy" />
+                           </graphic>
+                        </Button>
+                                <Button mnemonicParsing="false" onAction="#copyLocalIPAddress" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                     <graphic>
                                         <FontIcon iconLiteral="far-copy" />
                                     </graphic>
                                 </Button>
-                                <Label text="Port" GridPane.rowIndex="1" />
-                                <TextField fx:id="serverPort" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                <Button maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#copyServerPort" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                <Button mnemonicParsing="false" onAction="#copyServerPort" GridPane.columnIndex="2" GridPane.rowIndex="2">
                                     <graphic>
                                         <FontIcon iconLiteral="far-copy" />
                                     </graphic>

@@ -5,7 +5,9 @@ import in.pratanumandal.pingme.engine.packet.DisconnectPacket;
 import in.pratanumandal.pingme.engine.packet.Packet;
 import javafx.beans.property.SimpleBooleanProperty;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +28,19 @@ public class Server extends Thread {
         this.setDaemon(true);
     }
 
-    public List<String> getIPAddresses() {
+    public String getPublicIPAddress() {
+        try {
+            URL url = URI.create("https://checkip.amazonaws.com/").toURL();
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()))) {
+                return br.readLine();
+            }
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<String> getLocalIPAddresses() {
         List<String> addresses = new ArrayList<>();
 
         try {
