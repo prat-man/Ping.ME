@@ -22,7 +22,8 @@ import java.nio.file.Path;
 
 public class AudioAttachment extends Attachment {
 
-    private final ChatImage thumbnail;
+    protected transient Path cachedMP3;
+    protected final ChatImage thumbnail;
 
     public AudioAttachment(Path path) throws IOException {
         super(path, AttachmentType.AUDIO);
@@ -40,9 +41,18 @@ public class AudioAttachment extends Attachment {
         thumbnail = new ChatImage(SwingFXUtils.toFXImage(bufferedImage, null));
     }
 
-    private byte[] convert() throws IOException {
-        // Temporary target file
-        Path tempPath = Files.createTempFile("audio-", ".mp3");
+    private void convert() throws IOException {
+        // Check if already cached
+        if (cachedMP3 != null && Files.exists(cachedMP3)) {
+            return;
+        }
+
+        // Write payload to temporary file
+        Path tempFile = Files.createTempFile(FilenameUtils.getBaseName(getFileName()), FilenameUtils.getExtension(getFileName()));
+        Files.write(tempFile, payload);
+
+        // Temporary target MP3 file
+        Path tempFileMP3 = Files.createTempFile(FilenameUtils.getBaseName(getFileName()), ".mp3");
 
         // Audio attributes
         AudioAttributes audio = new AudioAttributes();
@@ -59,23 +69,17 @@ public class AudioAttachment extends Attachment {
         // Encode
         Encoder encoder = new Encoder();
         try {
-            encoder.encode(new MultimediaObject(path.toFile()), tempPath.toFile(), attrs);
+            encoder.encode(new MultimediaObject(tempFile.toFile()), tempFileMP3.toFile(), attrs);
         } catch (EncoderException e) {
             throw new IOException(e);
         }
 
-        // Read MP3 bytes into memory
-        byte[] bytes = Files.readAllBytes(tempPath);
+        // Cleanup
+        Files.delete(tempFile);
+        tempFileMP3.toFile().deleteOnExit();
 
-        // Delete temp file
-        Files.delete(tempPath);
-
-        return bytes;
-    }
-
-    public void load() throws IOException {
-        this.fileName = path.getFileName().toString() + ".mp3";
-        this.payload = this.convert();
+        // Cache converted file
+        cachedMP3 = tempFileMP3;
     }
 
     @Override
@@ -90,9 +94,8 @@ public class AudioAttachment extends Attachment {
 
     public Media getMedia() {
         try {
-            Path tempFile = Files.createTempFile(FilenameUtils.getBaseName(getFileName()), FilenameUtils.getExtension(getFileName()));
-            Files.write(tempFile, payload);
-            return new Media(tempFile.toUri().toString());
+            this.convert();
+            return new Media(cachedMP3.toUri().toString());
         }
         catch (IOException e) {
             throw new RuntimeException(e);

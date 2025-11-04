@@ -15,7 +15,7 @@ import java.nio.file.Path;
 
 public class UnknownAttachment extends Attachment {
 
-    private final ChatImage thumbnail;
+    protected final ChatImage thumbnail;
 
     public UnknownAttachment(Path path) throws IOException {
         super(path, AttachmentType.UNKNOWN);
@@ -31,11 +31,6 @@ public class UnknownAttachment extends Attachment {
         g.dispose();
 
         thumbnail = new ChatImage(SwingFXUtils.toFXImage(bufferedImage, null));
-    }
-
-    public void load() throws IOException {
-        this.fileName = path.getFileName().toString();
-        this.payload = Files.readAllBytes(path);
     }
 
     @Override

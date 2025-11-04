@@ -14,7 +14,7 @@ import java.nio.file.Path;
 
 public class ImageAttachment extends Attachment {
 
-    private final ChatImage thumbnail;
+    protected final ChatImage thumbnail;
 
     public ImageAttachment(Path path) throws IOException {
         super(path, AttachmentType.IMAGE);
@@ -25,11 +25,6 @@ public class ImageAttachment extends Attachment {
                 .asBufferedImage();
 
         thumbnail = new ChatImage(SwingFXUtils.toFXImage(bufferedImage, null));
-    }
-
-    public void load() throws IOException {
-        this.fileName = path.getFileName().toString();
-        this.payload = Files.readAllBytes(path);
     }
 
     @Override
