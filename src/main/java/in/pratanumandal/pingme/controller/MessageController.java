@@ -6,6 +6,7 @@ import in.pratanumandal.pingme.common.Utils;
 import in.pratanumandal.pingme.components.Avatar;
 import in.pratanumandal.pingme.engine.entity.Message;
 import in.pratanumandal.pingme.engine.entity.attachment.Attachment;
+import in.pratanumandal.pingme.engine.entity.attachment.AudioAttachment;
 import in.pratanumandal.pingme.state.PrimaryStage;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -19,6 +20,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
@@ -95,7 +98,13 @@ public class MessageController {
                                 throw new RuntimeException(e);
                             }
                         }
-                        else if (attachment.getType() == Attachment.AttachmentType.FILE) {
+                        else if (attachment.getType() == Attachment.AttachmentType.AUDIO) {
+                            AudioAttachment audioAttachment =  (AudioAttachment) attachment;
+                            Media media = audioAttachment.getMedia();
+                            MediaPlayer mediaPlayer = new MediaPlayer(media);
+                            mediaPlayer.play();
+                        }
+                        else if (attachment.getType() == Attachment.AttachmentType.UNKNOWN) {
                             FileChooser fileChooser = new FileChooser();
                             fileChooser.setInitialFileName(attachment.getFileName());
                             File file = fileChooser.showSaveDialog(PrimaryStage.getInstance().getStage());

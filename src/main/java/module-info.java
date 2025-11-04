@@ -1,6 +1,7 @@
 module in.pratanumandal.pingme {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.media;
 
     requires org.fxmisc.flowless;
     requires org.controlsfx.controls;
@@ -10,6 +11,8 @@ module in.pratanumandal.pingme {
     requires net.coobird.thumbnailator;
     requires com.fasterxml.jackson.databind;
     requires java.net.http;
+    requires org.apache.commons.io;
+    requires jave.core;
 
     opens in.pratanumandal.pingme to javafx.fxml;
     opens in.pratanumandal.pingme.controller to javafx.fxml;

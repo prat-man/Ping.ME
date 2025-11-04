@@ -11,17 +11,18 @@ import java.util.Objects;
 public abstract class Attachment implements Serializable {
 
     protected final transient Path path;
-
-    protected final String fileName;
     protected final AttachmentType attachmentType;
-    protected final byte[] payload;
+
+    protected String fileName;
+    protected byte[] payload;
 
     public Attachment(Path path, AttachmentType attachmentType) throws IOException {
         this.path = path;
-        this.fileName = path.getFileName().toString();
         this.attachmentType = attachmentType;
-        this.payload = Files.readAllBytes(path);
+        this.load();
     }
+
+    public abstract void load() throws IOException;
 
     public String getFileName() {
         return fileName;
@@ -49,7 +50,8 @@ public abstract class Attachment implements Serializable {
 
     public enum AttachmentType {
         IMAGE,
-        FILE
+        AUDIO,
+        UNKNOWN
     }
 
 }

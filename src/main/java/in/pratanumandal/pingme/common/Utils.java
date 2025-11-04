@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.scene.image.Image;
 
 import java.util.Objects;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 
 public class Utils {
@@ -33,6 +34,20 @@ public class Utils {
             doneLatch.await();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @SafeVarargs
+    public static <T> T tryOrDefault(Callable<T>... attempts) {
+        for (int i = 0; i < attempts.length - 1; i++) {
+            try {
+                return attempts[i].call();
+            } catch (Exception ignored) {}
+        }
+        try {
+            return attempts[attempts.length - 1].call();
+        } catch (Exception e) {
+            throw new RuntimeException("All attempts failed", e);
         }
     }
 

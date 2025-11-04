@@ -23,6 +23,8 @@ public class AttachmentController {
 
     @FXML private StackPane view;
 
+    @FXML private StackPane play;
+
     @FXML private StackPane download;
 
     @FXML private ImageView fileIcon;
@@ -41,7 +43,8 @@ public class AttachmentController {
         pane.hoverProperty().addListener((obs, oldVal, newVal) -> {
             close.setVisible(mode == AttachmentMode.CREATE && newVal);
             view.setVisible(mode == AttachmentMode.VIEW && attachment.getType() == Attachment.AttachmentType.IMAGE && newVal);
-            download.setVisible(mode == AttachmentMode.VIEW && attachment.getType() == Attachment.AttachmentType.FILE && newVal);
+            play.setVisible(mode == AttachmentMode.VIEW && attachment.getType() == Attachment.AttachmentType.AUDIO && newVal);
+            download.setVisible(mode == AttachmentMode.VIEW && attachment.getType() == Attachment.AttachmentType.UNKNOWN && newVal);
 
             fileIcon.setEffect(newVal ? blur : null);
         });

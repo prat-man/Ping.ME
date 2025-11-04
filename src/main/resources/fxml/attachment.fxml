@@ -33,6 +33,15 @@
             <String fx:value="view" />
          </styleClass>
       </StackPane>
+      <StackPane fx:id="play" layoutX="10.0" layoutY="10.0" onMouseClicked="#remove" prefHeight="${thumbnailSize}" prefWidth="${thumbnailSize}" visible="false">
+         <children>
+            <FontIcon iconLiteral="fas-play" />
+         </children>
+         <styleClass>
+            <String fx:value="attachment" />
+            <String fx:value="play" />
+         </styleClass>
+      </StackPane>
       <StackPane fx:id="download" layoutX="10.0" layoutY="10.0" onMouseClicked="#remove" prefHeight="${thumbnailSize}" prefWidth="${thumbnailSize}" visible="false">
          <children>
             <FontIcon iconLiteral="fas-download" />

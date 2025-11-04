@@ -1,10 +1,12 @@
 package in.pratanumandal.pingme.controller;
 
 import in.pratanumandal.pingme.common.Constants;
+import in.pratanumandal.pingme.common.Utils;
 import in.pratanumandal.pingme.engine.client.Client;
 import in.pratanumandal.pingme.engine.entity.Message;
 import in.pratanumandal.pingme.engine.entity.attachment.Attachment;
-import in.pratanumandal.pingme.engine.entity.attachment.FileAttachment;
+import in.pratanumandal.pingme.engine.entity.attachment.AudioAttachment;
+import in.pratanumandal.pingme.engine.entity.attachment.UnknownAttachment;
 import in.pratanumandal.pingme.engine.entity.attachment.ImageAttachment;
 import in.pratanumandal.pingme.state.ChatState;
 import in.pratanumandal.pingme.state.PrimaryStage;
@@ -151,20 +153,13 @@ public class ChatController {
 
         if (files != null) {
             files.forEach(file -> {
-                try {
-                    Attachment attachment;
-                    try {
-                        attachment = new ImageAttachment(file.toPath());
-                    }
-                    catch (Exception e) {
-                        attachment = new FileAttachment(file.toPath());
-                    }
-                    if (!attachments.contains(attachment)) {
-                        attachments.add(attachment);
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                    // TODO: Handle exception
+                Attachment attachment = Utils.tryOrDefault(
+                        () -> new ImageAttachment(file.toPath()),
+                        () -> new AudioAttachment(file.toPath()),
+                        () -> new UnknownAttachment(file.toPath())
+                );
+                if (!attachments.contains(attachment)) {
+                    attachments.add(attachment);
                 }
             });
         }

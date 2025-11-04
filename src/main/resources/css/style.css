@@ -154,6 +154,7 @@
 }
 .attachment.close,
 .attachment.view,
+.attachment.play,
 .attachment.download {
     -fx-background-radius: 5;
 }
@@ -161,11 +162,13 @@
     -fx-background-color: #CD5C5CA0;
 }
 .attachment.view,
+.attachment.play,
 .attachment.download {
     -fx-background-color: #1D7CF2A0;
 }
 .attachment.close .ikonli-font-icon,
 .attachment.view .ikonli-font-icon,
+.attachment.play .ikonli-font-icon,
 .attachment.download .ikonli-font-icon {
     -fx-icon-size: 20px;
     -fx-icon-color: white;

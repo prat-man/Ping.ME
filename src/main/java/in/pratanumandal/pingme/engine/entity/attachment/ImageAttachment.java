@@ -9,6 +9,7 @@ import net.coobird.thumbnailator.Thumbnails;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ImageAttachment extends Attachment {
@@ -24,6 +25,11 @@ public class ImageAttachment extends Attachment {
                 .asBufferedImage();
 
         thumbnail = new ChatImage(SwingFXUtils.toFXImage(bufferedImage, null));
+    }
+
+    public void load() throws IOException {
+        this.fileName = path.getFileName().toString();
+        this.payload = Files.readAllBytes(path);
     }
 
     @Override

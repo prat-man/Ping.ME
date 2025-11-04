@@ -10,14 +10,15 @@ import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class FileAttachment extends Attachment {
+public class UnknownAttachment extends Attachment {
 
     private final ChatImage thumbnail;
 
-    public FileAttachment(Path path) throws IOException {
-        super(path, AttachmentType.FILE);
+    public UnknownAttachment(Path path) throws IOException {
+        super(path, AttachmentType.UNKNOWN);
 
         // load thumbnail
         Icon icon = FileSystemView.getFileSystemView().getSystemIcon(path.toFile(), 32, 32);
@@ -30,6 +31,11 @@ public class FileAttachment extends Attachment {
         g.dispose();
 
         thumbnail = new ChatImage(SwingFXUtils.toFXImage(bufferedImage, null));
+    }
+
+    public void load() throws IOException {
+        this.fileName = path.getFileName().toString();
+        this.payload = Files.readAllBytes(path);
     }
 
     @Override
