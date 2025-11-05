@@ -55,6 +55,7 @@ public class ChatController {
     private ObservableList<Attachment> attachments;
 
     private Client client;
+    private ViewerController viewer;
 
     @FXML
     protected void initialize() {
@@ -187,6 +188,10 @@ public class ChatController {
         });
     }
 
+    public void setViewer(ViewerController viewer) {
+        this.viewer = viewer;
+    }
+
     private void addChatMessage(Message message) {
         try {
             FXMLLoader loader = new FXMLLoader(ChatController.class.getResource("/fxml/message.fxml"));
@@ -195,6 +200,7 @@ public class ChatController {
 
             MessageController controller = loader.getController();
             controller.setMessage(message);
+            controller.setViewer(viewer);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -203,5 +209,5 @@ public class ChatController {
     private void updateSendButton() {
         send.setDisable(message.getText().isBlank() && attachments.isEmpty());
     }
-
+    
 }

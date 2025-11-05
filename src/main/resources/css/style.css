@@ -173,3 +173,11 @@
     -fx-icon-size: 20px;
     -fx-icon-color: white;
 }
+
+.viewer .media-pane {
+    -fx-background-color: #333333;
+}
+.viewer .sidebar,
+.viewer .controls {
+    -fx-background-color: -fx-background;
+}

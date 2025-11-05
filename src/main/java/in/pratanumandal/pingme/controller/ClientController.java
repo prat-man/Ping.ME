@@ -13,6 +13,8 @@ public class ClientController {
 
     @FXML private ChatController chatController;
 
+    @FXML private ViewerController viewerController;
+
     public void connect(String name, Image image, InetAddress address, int port) throws IOException {
         Client client = new Client(name, image, address, port);
         client.start();
@@ -20,6 +22,9 @@ public class ClientController {
         client.connect();
 
         chatController.setClient(client);
+
+        chatController.setViewer(viewerController);
+        viewerController.hide();
 
         PrimaryStage.getInstance().getStage().setOnCloseRequest(event -> client.disconnect());
         PrimaryStage.getInstance().getStage().setTitle(Constants.APP_NAME + " (Client)");

@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.SplitPane?>
-<SplitPane dividerPositions="0.7" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="in.pratanumandal.pingme.controller.ClientController">
-   <items>
-       <fx:include fx:id="chat" source="chat.fxml" />
-       <fx:include fx:id="lobby" source="lobby.fxml" SplitPane.resizableWithParent="false" />
-   </items>
-</SplitPane>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<StackPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="in.pratanumandal.pingme.controller.ClientController">
+   <children>
+      <SplitPane dividerPositions="0.7">
+         <items>
+             <fx:include fx:id="chat" source="chat.fxml" />
+             <fx:include fx:id="lobby" source="lobby.fxml" SplitPane.resizableWithParent="false" />
+         </items>
+      </SplitPane>
+       <fx:include fx:id="viewer" source="viewer.fxml" SplitPane.resizableWithParent="false" />
+   </children>
+</StackPane>

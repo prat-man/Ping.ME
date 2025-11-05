@@ -1,12 +1,15 @@
 package in.pratanumandal.pingme.controller;
 
 import in.pratanumandal.pingme.engine.entity.attachment.Attachment;
+import in.pratanumandal.pingme.engine.entity.attachment.AudioAttachment;
 import in.pratanumandal.pingme.engine.entity.attachment.ImageAttachment;
 import in.pratanumandal.pingme.state.PrimaryStage;
 import javafx.fxml.FXML;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -14,18 +17,28 @@ import java.io.IOException;
 
 public class ViewerController {
 
-    @FXML private VBox viewer;
+    @FXML private AnchorPane player;
 
-    @FXML private ButtonBar buttons;
+    @FXML private VBox sidebar;
+
+    @FXML private HBox controls;
 
     @FXML private ImageView imageView;
+
+    @FXML private MediaView mediaView;
 
     private Attachment attachment;
 
     @FXML
     private void initialize() {
-        imageView.fitWidthProperty().bind(viewer.widthProperty());
-        imageView.fitHeightProperty().bind(viewer.heightProperty().subtract(buttons.heightProperty()));
+        imageView.fitWidthProperty().bind(player.widthProperty().subtract(sidebar.widthProperty()).subtract(100));
+        imageView.fitHeightProperty().bind(player.heightProperty().subtract(controls.heightProperty()).subtract(100));
+        mediaView.fitWidthProperty().bind(player.widthProperty().subtract(sidebar.widthProperty()).subtract(100));
+        mediaView.fitHeightProperty().bind(player.heightProperty().subtract(controls.heightProperty()).subtract(100));
+
+        player.managedProperty().bind(player.visibleProperty());
+        sidebar.managedProperty().bind(sidebar.visibleProperty());
+        controls.managedProperty().bind(controls.visibleProperty());
     }
 
     public void setAttachment(Attachment attachment) {
@@ -33,6 +46,15 @@ public class ViewerController {
 
         if (attachment.getType() == Attachment.AttachmentType.IMAGE) {
             imageView.setImage(((ImageAttachment) attachment).getImage());
+            imageView.setVisible(true);
+            mediaView.setVisible(false);
+            controls.setVisible(false);
+        }
+        else if (attachment.getType() == Attachment.AttachmentType.AUDIO) {
+            imageView.setImage(attachment.getThumbnail());
+            imageView.setVisible(true);
+            mediaView.setVisible(false);
+            controls.setVisible(true);
         }
     }
 
@@ -53,6 +75,16 @@ public class ViewerController {
                 }
             }
         }
+    }
+
+    @FXML
+    public void show() {
+        player.setVisible(true);
+    }
+
+    @FXML
+    public void hide() {
+        player.setVisible(false);
     }
 
 }
