@@ -177,7 +177,7 @@
 .viewer .media-pane {
     -fx-background-color: #333333;
 }
-.viewer .sidebar,
+.viewer .toolbar,
 .viewer .controls {
     -fx-background-color: -fx-background;
 }

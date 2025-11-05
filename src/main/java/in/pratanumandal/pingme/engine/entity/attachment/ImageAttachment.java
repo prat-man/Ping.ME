@@ -5,6 +5,7 @@ import in.pratanumandal.pingme.engine.entity.ChatImage;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.geometry.Positions;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -21,7 +22,9 @@ public class ImageAttachment extends Attachment {
 
         // load thumbnail
         BufferedImage bufferedImage = Thumbnails.of(path.toFile())
-                .forceSize(Constants.THUMBNAIL_SIZE, Constants.THUMBNAIL_SIZE)
+                .size(Constants.THUMBNAIL_SIZE, Constants.THUMBNAIL_SIZE)
+                .crop(Positions.CENTER)
+                .keepAspectRatio(true)
                 .asBufferedImage();
 
         thumbnail = new ChatImage(SwingFXUtils.toFXImage(bufferedImage, null));

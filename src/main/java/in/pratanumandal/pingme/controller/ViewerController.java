@@ -19,7 +19,7 @@ public class ViewerController {
 
     @FXML private AnchorPane player;
 
-    @FXML private VBox sidebar;
+    @FXML private HBox toolbar;
 
     @FXML private HBox controls;
 
@@ -31,13 +31,13 @@ public class ViewerController {
 
     @FXML
     private void initialize() {
-        imageView.fitWidthProperty().bind(player.widthProperty().subtract(sidebar.widthProperty()).subtract(100));
-        imageView.fitHeightProperty().bind(player.heightProperty().subtract(controls.heightProperty()).subtract(100));
-        mediaView.fitWidthProperty().bind(player.widthProperty().subtract(sidebar.widthProperty()).subtract(100));
-        mediaView.fitHeightProperty().bind(player.heightProperty().subtract(controls.heightProperty()).subtract(100));
+        imageView.fitWidthProperty().bind(player.widthProperty().subtract(100));
+        imageView.fitHeightProperty().bind(player.heightProperty().subtract(toolbar.heightProperty()).subtract(controls.heightProperty()).subtract(100));
+        mediaView.fitWidthProperty().bind(player.widthProperty().subtract(100));
+        mediaView.fitHeightProperty().bind(player.heightProperty().subtract(toolbar.heightProperty()).subtract(controls.heightProperty()).subtract(100));
 
         player.managedProperty().bind(player.visibleProperty());
-        sidebar.managedProperty().bind(sidebar.visibleProperty());
+        toolbar.managedProperty().bind(toolbar.visibleProperty());
         controls.managedProperty().bind(controls.visibleProperty());
     }
 
@@ -60,19 +60,17 @@ public class ViewerController {
 
     @FXML
     private void download() {
-        if (attachment.getType() == Attachment.AttachmentType.IMAGE) {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setInitialFileName(attachment.getFileName());
-            File file = fileChooser.showSaveDialog(PrimaryStage.getInstance().getStage());
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialFileName(attachment.getFileName());
+        File file = fileChooser.showSaveDialog(PrimaryStage.getInstance().getStage());
 
-            if (file != null) {
-                try {
-                    attachment.write(file.toPath());
-                }
-                catch (IOException e) {
-                    // TODO: Handle exceptions
-                    throw new RuntimeException(e);
-                }
+        if (file != null) {
+            try {
+                attachment.write(file.toPath());
+            }
+            catch (IOException e) {
+                // TODO: Handle exceptions
+                throw new RuntimeException(e);
             }
         }
     }

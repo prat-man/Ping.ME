@@ -11,34 +11,30 @@
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox VBox.vgrow="ALWAYS">
+            <HBox fx:id="toolbar" spacing="7.0" styleClass="toolbar">
                <children>
-                   <VBox fx:id="sidebar" spacing="7.0" styleClass="sidebar">
-                       <children>
-                           <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#hide">
-                               <graphic>
-                                   <FontIcon iconLiteral="fas-arrow-left" />
-                               </graphic>
-                           </Button>
-                           <Region HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" />
-                           <Button mnemonicParsing="false" onAction="#download">
-                               <graphic>
-                                   <FontIcon iconLiteral="fas-download" />
-                               </graphic>
-                           </Button>
-                       </children>
-                       <padding>
-                           <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
-                       </padding>
-                   </VBox>
-                  <StackPane styleClass="media-pane" HBox.hgrow="ALWAYS">
-                     <children>
-                        <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true" visible="false" />
-                        <MediaView fx:id="mediaView" visible="false" />
-                     </children>
-                  </StackPane>
+                     <Button mnemonicParsing="false" onAction="#hide">
+                         <graphic>
+                             <FontIcon iconLiteral="fas-arrow-left" />
+                         </graphic>
+                     </Button>
+                  <Region HBox.hgrow="ALWAYS" />
+                     <Button mnemonicParsing="false" onAction="#download">
+                         <graphic>
+                             <FontIcon iconLiteral="fas-download" />
+                         </graphic>
+                     </Button>
                </children>
+               <padding>
+                  <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+               </padding>
             </HBox>
+            <StackPane styleClass="media-pane" VBox.vgrow="ALWAYS">
+               <children>
+                  <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true" visible="false" />
+                  <MediaView fx:id="mediaView" visible="false" />
+               </children>
+            </StackPane>
             <HBox fx:id="controls" alignment="CENTER_LEFT" spacing="7.0" styleClass="controls">
                <children>
                   <Button mnemonicParsing="false">
