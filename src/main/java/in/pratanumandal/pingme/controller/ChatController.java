@@ -4,10 +4,7 @@ import in.pratanumandal.pingme.common.Constants;
 import in.pratanumandal.pingme.common.Utils;
 import in.pratanumandal.pingme.engine.client.Client;
 import in.pratanumandal.pingme.engine.entity.Message;
-import in.pratanumandal.pingme.engine.entity.attachment.Attachment;
-import in.pratanumandal.pingme.engine.entity.attachment.AudioAttachment;
-import in.pratanumandal.pingme.engine.entity.attachment.UnknownAttachment;
-import in.pratanumandal.pingme.engine.entity.attachment.ImageAttachment;
+import in.pratanumandal.pingme.engine.entity.attachment.*;
 import in.pratanumandal.pingme.state.ChatState;
 import in.pratanumandal.pingme.state.PrimaryStage;
 import javafx.collections.FXCollections;
@@ -157,6 +154,7 @@ public class ChatController {
                 Attachment attachment = Utils.tryOrDefault(
                         () -> new ImageAttachment(file.toPath()),
                         () -> new AudioAttachment(file.toPath()),
+                        () -> new VideoAttachment(file.toPath()),
                         () -> new UnknownAttachment(file.toPath())
                 );
                 if (!attachments.contains(attachment)) {

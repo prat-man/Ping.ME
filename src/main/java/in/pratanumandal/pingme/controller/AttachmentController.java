@@ -43,7 +43,7 @@ public class AttachmentController {
         pane.hoverProperty().addListener((obs, oldVal, newVal) -> {
             close.setVisible(mode == AttachmentMode.CREATE && newVal);
             view.setVisible(mode == AttachmentMode.VIEW && attachment.getType() == Attachment.AttachmentType.IMAGE && newVal);
-            play.setVisible(mode == AttachmentMode.VIEW && attachment.getType() == Attachment.AttachmentType.AUDIO && newVal);
+            play.setVisible(mode == AttachmentMode.VIEW && (attachment.getType() == Attachment.AttachmentType.AUDIO || attachment.getType() == Attachment.AttachmentType.VIDEO) && newVal);
             download.setVisible(mode == AttachmentMode.VIEW && attachment.getType() == Attachment.AttachmentType.UNKNOWN && newVal);
 
             fileIcon.setEffect(newVal ? blur : null);

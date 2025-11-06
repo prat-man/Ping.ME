@@ -49,6 +49,7 @@ public abstract class Attachment implements Serializable {
     public enum AttachmentType {
         IMAGE,
         AUDIO,
+        VIDEO,
         UNKNOWN
     }
 

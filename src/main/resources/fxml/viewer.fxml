@@ -37,12 +37,17 @@
             </StackPane>
             <HBox fx:id="controls" alignment="CENTER_LEFT" spacing="7.0" styleClass="controls">
                <children>
-                  <Button mnemonicParsing="false">
+                  <Button fx:id="playButton" mnemonicParsing="false" onAction="#play">
                       <graphic>
                           <FontIcon iconLiteral="fas-play" styleClass="action-button" />
                       </graphic>
                   </Button>
-                  <Slider HBox.hgrow="ALWAYS" />
+                  <Button fx:id="pauseButton" layoutX="17.0" layoutY="17.0" mnemonicParsing="false" onAction="#pause" visible="false">
+                     <graphic>
+                        <FontIcon iconLiteral="fas-pause" styleClass="action-button" />
+                     </graphic>
+                  </Button>
+                  <Slider fx:id="seekBar" HBox.hgrow="ALWAYS" />
                </children>
                <padding>
                   <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />

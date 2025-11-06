@@ -18,19 +18,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class AudioAttachment extends Attachment {
+public class VideoAttachment extends Attachment {
 
     protected transient Path cachedMP4;
     protected final ChatImage thumbnail;
 
-    public AudioAttachment(Path path) throws IOException, EncoderException {
-        super(path, AttachmentType.AUDIO);
+    public VideoAttachment(Path path) throws IOException, EncoderException {
+        super(path, AttachmentType.VIDEO);
 
         // probe media type
         MultimediaObject obj = new MultimediaObject(path.toFile());
         MultimediaInfo info = obj.getInfo();
-        if (info.getAudio() == null || info.getVideo() != null) {
-            throw new RuntimeException("Not an audio file");
+        if (info.getVideo() == null) {
+            throw new RuntimeException("Not a video file");
         }
 
         // load thumbnail
@@ -51,6 +51,7 @@ public class AudioAttachment extends Attachment {
             return;
         }
         cachedMP4 = Utils.convertMedia(getFileName(), payload);
+        System.out.println("Cached: " + cachedMP4);
     }
 
     @Override

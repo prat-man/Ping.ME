@@ -3,14 +3,18 @@ package in.pratanumandal.pingme.controller;
 import in.pratanumandal.pingme.engine.entity.attachment.Attachment;
 import in.pratanumandal.pingme.engine.entity.attachment.AudioAttachment;
 import in.pratanumandal.pingme.engine.entity.attachment.ImageAttachment;
+import in.pratanumandal.pingme.engine.entity.attachment.VideoAttachment;
 import in.pratanumandal.pingme.state.PrimaryStage;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +31,17 @@ public class ViewerController {
 
     @FXML private MediaView mediaView;
 
+    @FXML private Button playButton;
+
+    @FXML private Button pauseButton;
+
+    @FXML private Slider seekBar;
+
     private Attachment attachment;
+
+    private MediaPlayer mediaPlayer;
+
+    private boolean isUserSeeking = false;
 
     @FXML
     private void initialize() {
@@ -39,6 +53,8 @@ public class ViewerController {
         player.managedProperty().bind(player.visibleProperty());
         toolbar.managedProperty().bind(toolbar.visibleProperty());
         controls.managedProperty().bind(controls.visibleProperty());
+        playButton.managedProperty().bind(playButton.visibleProperty());
+        pauseButton.managedProperty().bind(pauseButton.visibleProperty());
     }
 
     public void setAttachment(Attachment attachment) {
@@ -55,11 +71,28 @@ public class ViewerController {
             imageView.setVisible(true);
             mediaView.setVisible(false);
             controls.setVisible(true);
+
+            AudioAttachment audioAttachment = (AudioAttachment) attachment;
+            mediaPlayer = new MediaPlayer(audioAttachment.getMedia());
+            this.initMediaPlayer();
+        }
+        else if (attachment.getType() == Attachment.AttachmentType.VIDEO) {
+            imageView.setVisible(false);
+            mediaView.setVisible(true);
+            controls.setVisible(true);
+
+            VideoAttachment videoAttachment = (VideoAttachment) attachment;
+            System.out.println(videoAttachment.getMedia());
+            mediaPlayer = new MediaPlayer(videoAttachment.getMedia());
+            this.initMediaPlayer();
+            mediaView.setMediaPlayer(mediaPlayer);
+
+            System.out.println("Created: " + mediaPlayer);
         }
     }
 
     @FXML
-    private void download() {
+    public void download() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialFileName(attachment.getFileName());
         File file = fileChooser.showSaveDialog(PrimaryStage.getInstance().getStage());
@@ -83,6 +116,68 @@ public class ViewerController {
     @FXML
     public void hide() {
         player.setVisible(false);
+
+        if (mediaPlayer != null) {
+            System.out.println("Destroyed: " + mediaPlayer);
+
+            mediaPlayer.stop();
+            mediaPlayer.dispose();
+            mediaPlayer = null;
+        }
+    }
+
+    private void initMediaPlayer() {
+        // Set length of slider
+        mediaPlayer.setOnReady(() -> {
+            seekBar.setMax(mediaPlayer.getTotalDuration().toSeconds());
+            mediaPlayer.play();
+        });
+
+        mediaPlayer.setOnError(() -> {
+            mediaPlayer.getError().printStackTrace();
+        });
+
+        // Update slider during playback
+        mediaPlayer.currentTimeProperty().addListener((obs, oldTime, newTime) -> {
+            if (!isUserSeeking) {
+                seekBar.setValue(newTime.toSeconds());
+            }
+        });
+
+        // Handle dragging (scrubbing)
+        seekBar.valueChangingProperty().addListener((obs, wasChanging, isChanging) -> {
+            isUserSeeking = isChanging;
+            if (!isChanging) {
+                mediaPlayer.seek(Duration.seconds(seekBar.getValue()));
+            }
+        });
+
+        // Handle clicks on the track
+        seekBar.setOnMousePressed(e -> isUserSeeking = true);
+        seekBar.setOnMouseReleased(e -> {
+            mediaPlayer.seek(Duration.seconds(seekBar.getValue()));
+            isUserSeeking = false;
+        });
+    }
+
+    @FXML
+    public void play() {
+        System.out.println("Playing: " + mediaPlayer);
+        if (mediaPlayer != null) {
+            mediaPlayer.play();
+        }
+        playButton.setVisible(false);
+        pauseButton.setVisible(true);
+    }
+
+    @FXML
+    public void pause() {
+        System.out.println("Pausing: " + mediaPlayer);
+        if (mediaPlayer != null) {
+            mediaPlayer.pause();
+        }
+        playButton.setVisible(true);
+        pauseButton.setVisible(false);
     }
 
 }

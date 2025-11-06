@@ -63,12 +63,14 @@ public class MessageController {
                             viewer.show();
                         }
                         else if (attachment.getType() == Attachment.AttachmentType.AUDIO) {
-//                            AudioAttachment audioAttachment =  (AudioAttachment) attachment;
-//                            Media media = audioAttachment.getMedia();
-//                            MediaPlayer mediaPlayer = new MediaPlayer(media);
-//                            mediaPlayer.play();
                             viewer.setAttachment(attachment);
                             viewer.show();
+                            viewer.play();
+                        }
+                        else if (attachment.getType() == Attachment.AttachmentType.VIDEO) {
+                            viewer.setAttachment(attachment);
+                            viewer.show();
+//                            viewer.play();
                         }
                         else if (attachment.getType() == Attachment.AttachmentType.UNKNOWN) {
                             FileChooser fileChooser = new FileChooser();
