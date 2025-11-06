@@ -51,7 +51,6 @@ public class VideoAttachment extends Attachment {
             return;
         }
         cachedMP4 = Utils.convertMedia(getFileName(), payload);
-        System.out.println("Cached: " + cachedMP4);
     }
 
     @Override

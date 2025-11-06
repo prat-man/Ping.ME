@@ -6,11 +6,13 @@ import in.pratanumandal.pingme.engine.entity.attachment.ImageAttachment;
 import in.pratanumandal.pingme.engine.entity.attachment.VideoAttachment;
 import in.pratanumandal.pingme.state.PrimaryStage;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
@@ -55,6 +57,8 @@ public class ViewerController {
         controls.managedProperty().bind(controls.visibleProperty());
         playButton.managedProperty().bind(playButton.visibleProperty());
         pauseButton.managedProperty().bind(pauseButton.visibleProperty());
+
+        this.pause();
     }
 
     public void setAttachment(Attachment attachment) {
@@ -82,12 +86,9 @@ public class ViewerController {
             controls.setVisible(true);
 
             VideoAttachment videoAttachment = (VideoAttachment) attachment;
-            System.out.println(videoAttachment.getMedia());
             mediaPlayer = new MediaPlayer(videoAttachment.getMedia());
-            this.initMediaPlayer();
             mediaView.setMediaPlayer(mediaPlayer);
-
-            System.out.println("Created: " + mediaPlayer);
+            this.initMediaPlayer();
         }
     }
 
@@ -115,11 +116,10 @@ public class ViewerController {
 
     @FXML
     public void hide() {
+        this.pause();
         player.setVisible(false);
 
         if (mediaPlayer != null) {
-            System.out.println("Destroyed: " + mediaPlayer);
-
             mediaPlayer.stop();
             mediaPlayer.dispose();
             mediaPlayer = null;
@@ -130,11 +130,24 @@ public class ViewerController {
         // Set length of slider
         mediaPlayer.setOnReady(() -> {
             seekBar.setMax(mediaPlayer.getTotalDuration().toSeconds());
-            mediaPlayer.play();
+            this.play();
         });
 
         mediaPlayer.setOnError(() -> {
-            mediaPlayer.getError().printStackTrace();
+            if (mediaPlayer.getError().getType() == MediaException.Type.UNKNOWN) {
+                this.setAttachment(attachment);
+            }
+            else {
+                MediaException error = mediaPlayer.getError();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Failed to play media");
+                alert.setContentText(error.getType() + ": " + error.getMessage());
+                alert.initOwner(PrimaryStage.getInstance().getStage());
+                alert.showAndWait();
+
+                this.hide();
+            }
         });
 
         // Update slider during playback
@@ -162,7 +175,6 @@ public class ViewerController {
 
     @FXML
     public void play() {
-        System.out.println("Playing: " + mediaPlayer);
         if (mediaPlayer != null) {
             mediaPlayer.play();
         }
@@ -172,7 +184,6 @@ public class ViewerController {
 
     @FXML
     public void pause() {
-        System.out.println("Pausing: " + mediaPlayer);
         if (mediaPlayer != null) {
             mediaPlayer.pause();
         }

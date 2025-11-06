@@ -65,12 +65,10 @@ public class MessageController {
                         else if (attachment.getType() == Attachment.AttachmentType.AUDIO) {
                             viewer.setAttachment(attachment);
                             viewer.show();
-                            viewer.play();
                         }
                         else if (attachment.getType() == Attachment.AttachmentType.VIDEO) {
                             viewer.setAttachment(attachment);
                             viewer.show();
-//                            viewer.play();
                         }
                         else if (attachment.getType() == Attachment.AttachmentType.UNKNOWN) {
                             FileChooser fileChooser = new FileChooser();
